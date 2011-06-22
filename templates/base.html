@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Tenniswall{% endblock %}</title>
+
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            {% block header %}{% endblock %}
+        </div>
+        <div id="main_content">
+            {% block content %}{% endblock %}
+        </div>
+        <div id="footer">
+            {% block footer %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>
