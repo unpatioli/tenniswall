@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'tenniswall.views.home', name='home'),
     # url(r'^tenniswall/', include('tenniswall.foo.urls')),
     url(r'^$', include('welcome.urls')),
+    url(r'^walls/', include('walls.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
