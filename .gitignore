@@ -21,4 +21,5 @@ tmp
 
 db/
 mongo/
+static/
 .idea
