@@ -20,13 +20,6 @@ def paranoid(sender, **kwargs):
     from datetime import datetime
     sender.deleted_at = datetime.now()
 
-class Location(models.Model):
-    lat = models.FloatField()
-    lon = models.FloatField()
-
-    class Meta:
-        abstract = True
-
 class Ban(models.Model):
     approved_at = models.DateTimeField(null=True, blank=True)
     banned_at = models.DateTimeField(null=True, blank=True)

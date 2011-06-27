@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from walls.models.util import Timestamps, Paranoid, Location, Ban
+from walls.models.util import Timestamps, Paranoid, Ban
+from walls.models.geo import Location
 
 class Wall(Timestamps, Paranoid, Location, Ban):
     reported_by = models.ForeignKey(User)
