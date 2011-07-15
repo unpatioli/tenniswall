@@ -32,18 +32,11 @@ def register(request):
 class ProfileView(DetailView):
     model = UserProfile
 
-    def get_object(self, queryset=None):
-        if (self.request.user.is_authenticated()
-            and int(self.kwargs.get(pk, None)) == self.request.user.id):
-            return None
-        else:
-            return super(ProfileView, self).get_object(queryset)
-
-
-    def render_to_response(self, context, **response_kwargs):
-        if not self.object:
+    def get(self, request, **kwargs):
+        if (request.user.is_authenticated()
+            and int(self.kwargs.get('pk', None)) == request.user.id):
             return redirect('accounts_my_profile')
-
+        return super(ProfileView, self).get(request, **kwargs)
 
 class MyProfileView(DetailView):
     model = UserProfile
