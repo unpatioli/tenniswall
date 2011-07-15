@@ -1,0 +1,15 @@
+{% extends 'walls/base.html' %}
+
+{% block head %}
+  <!-- DEBUG -->
+  {{ form.media }}
+  <!-- END DEBUG -->
+{% endblock %}
+
+{% block content %}
+  <form action="." method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Add"/>
+  </form>
+{% endblock %}
