@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
+from accounts.models import UserProfile
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(max_length=30)
@@ -36,3 +37,7 @@ class RegistrationForm(forms.Form):
             raise forms.ValidationError(
                 _('User with the same email is already registered'))
         return email
+
+class UserprofileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
