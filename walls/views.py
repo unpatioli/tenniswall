@@ -1,34 +1,27 @@
 # Create your views here.
-from bson.objectid import ObjectId
 from django.contrib import messages
-from django.http import Http404
-from django.shortcuts import render, redirect
-from pymongo.connection import Connection
-from walls import forms
-
-db = Connection().tenniswall
+from django.shortcuts import render
+from django.views.generic import CreateView
+from django.utils.translation import ugettext as _
+from walls.forms import FreeWallForm
+from walls.models import FreeWall
 
 def index(request):
     return render(request, 'walls/index.html')
 
-def show(request, wall_id):
-    wall = db.walls.find_one(ObjectId(wall_id))
-    if wall:
-        return render(request, 'walls/show.html', {'wall': wall})
-    else:
-        raise Http404
+class AddView(CreateView):
+    model = FreeWall
+    form_class = FreeWallForm
+    
+    def get_initial(self):
+        initials = super(AddView, self).get_initial()
+        initials.update({'reported_by': self.request.user})
+        return initials
+        
+    def form_valid(self, form):
+        messages.success(self.request, _('Wall saved'))
+        return super(AddView, self).form_valid(form)
 
-def add(request):
-    if request.method == 'POST':
-        form = forms.AddWallForm(request.POST)
-        if form.is_valid():
-            wall = form.cleaned_data
-            wall_id = db.walls.insert(wall)
-            messages.success(request, "Wall added")
-            return redirect('walls_show', str(wall_id))
-        else:
-            messages.error(request, "Wall is not added")
-    else:
-        form = forms.AddWallForm()
-
-    return render(request, 'walls/add.html', {'form': form})
+    def form_invalid(self, form):
+        messages.error(self.request, _('Wall is not saved'))
+        return super(AddView, self).form_invalid(form)
