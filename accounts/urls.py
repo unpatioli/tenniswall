@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url
-from accounts.views import MyProfileView, MyProfileCreateView, ProfileView
+from accounts.views import MyProfileView, MyProfileCreateView, ProfileView, MyProfileEditView
 
 urlpatterns = patterns('',
     url(r'login/$',
@@ -7,13 +7,11 @@ urlpatterns = patterns('',
         { 'template_name': 'accounts/login.html', },
         name='accounts_login'
     ),
-
     url(r'logout/$',
         'django.contrib.auth.views.logout',
         { 'template_name': 'accounts/logged_out.html', },
         name='accounts_logout'
     ),
-
     url(r'register/$',
         'accounts.views.register',
         name='accounts_register'
@@ -30,5 +28,9 @@ urlpatterns = patterns('',
     url(r'profile/new/$',
         MyProfileCreateView.as_view(),
         name='accounts_my_profile_new'
+    ),
+    url(r'profile/edit/$',
+        MyProfileEditView.as_view(),
+        name='accounts_my_profile_edit'
     ),
 )

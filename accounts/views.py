@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.utils.translation import ugettext as _
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, UpdateView
 from accounts.forms import RegistrationForm, UserprofileForm
 from accounts.models import UserProfile
 
@@ -67,4 +67,27 @@ class MyProfileCreateView(CreateView):
     def form_invalid(self, form):
         messages.error(self.request, _('User profile is not created'))
         return super(MyProfileCreateView, self).form_invalid(form)
-        
+
+class MyProfileEditView(UpdateView):
+    model = UserProfile
+    form_class = UserprofileForm
+
+    def get_object(self, queryset=None):
+        try:
+            userprofile = self.request.user.get_profile()
+        except UserProfile.DoesNotExist:
+            userprofile = None
+        return userprofile
+
+    def form_valid(self, form):
+        messages.success(self.request, _('User profile is updated'))
+        return super(MyProfileEditView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('User profile is not updated'))
+        return super(MyProfileEditView, self).form_invalid(form)
+
+    def render_to_response(self, context, **response_kwargs):
+        if not self.object:
+            return redirect('accounts_my_profile_new')
+        return super(MyProfileEditView, self).render_to_response(context, **response_kwargs)
