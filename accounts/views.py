@@ -6,6 +6,7 @@ from django.views.generic import DetailView, CreateView, UpdateView
 from accounts.forms import RegistrationForm, UserprofileForm
 from accounts.models import UserProfile
 
+# todo: change register to class-based view
 def register(request):
     from django.contrib.auth.models import User
 
@@ -34,7 +35,7 @@ class ProfileView(DetailView):
 
     def get(self, request, **kwargs):
         if (request.user.is_authenticated()
-            and int(self.kwargs.get('pk', None)) == request.user.id):
+            and int(self.kwargs.get('pk')) == request.user.id):
             return redirect('accounts_my_profile')
         return super(ProfileView, self).get(request, **kwargs)
 
