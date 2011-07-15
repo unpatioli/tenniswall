@@ -3,14 +3,15 @@ from django.db.models.signals import pre_save
 from django.dispatch.dispatcher import receiver
 
 class Timestamps(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    updated_at = models.DateTimeField(auto_now=True, editable=False)
 
     class Meta:
         abstract = True
 
 class Paranoid(models.Model):
-    deleted_at = models.DateTimeField(null=True, blank=True, default=None)
+    deleted_at = models.DateTimeField(null=True, blank=True, default=None,
+                                      editable=False)
 
     class Meta:
         abstract = True
@@ -21,8 +22,8 @@ def paranoid(sender, **kwargs):
     sender.deleted_at = datetime.now()
 
 class Ban(models.Model):
-    approved_at = models.DateTimeField(null=True, blank=True)
-    banned_at = models.DateTimeField(null=True, blank=True)
+    approved_at = models.DateTimeField(null=True, blank=True, editable=False)
+    banned_at = models.DateTimeField(null=True, blank=True, editable=False)
 
     class Meta:
         abstract = True

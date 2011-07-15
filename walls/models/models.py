@@ -5,8 +5,9 @@ from walls.models.util import Timestamps, Paranoid, Ban
 from walls.models.geo import Location
 
 class Wall(Timestamps, Paranoid, Location, Ban):
-    reported_by = models.ForeignKey(User)
+    reported_by = models.ForeignKey(User, editable=False)
     address = models.CharField(max_length=250)
+    description = models.TextField(null=True, blank=True)
 
     class Meta:
         abstract = True
