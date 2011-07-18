@@ -13,73 +13,73 @@
   {% block head %}{% endblock %}
 </head>
 <body class="bp">
-    <div id="container" class="container">
-      <div id="main_container">
+  <div id="container" class="container">
+  <div id="main_container">
 
-        <div id="header_container" class="span-24 last">
-          <div id="header" class="span-16">
-              {% block header %}&nbsp;{% endblock %}
-          </div>
-          <div id="auth_panel" class="span-8 last">
-            {% if user.is_authenticated %}
-              <div id="user" class="prepend-3 span-3">
-                <div id="username">
-                  {% with user.get_profile as profile %}
-                    {% if profile %}
-                      <a href="{{ profile.get_absolute_url }}">
-                        {{ user.username }}
-                      </a>
-                    {% else %}
-                      {{ user.username }}
-                    {% endif %}
-                  {% endwith %}
-                </div>
-              </div>
-              <div class="span-2 last">
-                <a href="{% url accounts_logout %}">Logout</a>
-              </div>
-            {% else %}
-              <form action="{% url accounts_login %}" method="post">
-                {% csrf_token %}
-                <input type="text" name="username" />
-                <input type="password" name="password" />
-                <input type="submit" value="Login" />
-              </form>
-              <a href="{% url accounts_register %}">Registration</a>
-            {% endif %}
-          </div>
-          {% if messages %}
-            <div id="messages_container" class="prepend-1 span-22 append-1 last">
-              <div class="messages" class="span-24 last">
-                <ul class="messages_list">
-                  {% for message in messages %}
-                    <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
-                  {% endfor %}
-                </ul>
-              </div>
+    <div id="header_container" class="span-24 last">
+      <div id="header" class="span-16">
+        {% block header %}&nbsp;{% endblock %}
+      </div>
+      <div id="auth_panel" class="span-8 last">
+        {% if user.is_authenticated %}
+          <div id="user" class="prepend-3 span-3">
+            <div id="username">
+              {% with user.get_profile as profile %}
+                {% if profile %}
+                  <a href="{{ profile.get_absolute_url }}">
+                    {{ user.username }}
+                  </a>
+                {% else %}
+                  {{ user.username }}
+                {% endif %}
+              {% endwith %}
             </div>
-          {% endif %}
-        </div>
-
-        <div id="content_container" class="span-24 last">
-          <div id="content">
-            {% block content %}{% endblock %}
+          </div>
+          <div class="span-2 last">
+            <a href="{% url accounts_logout %}">Logout</a>
+          </div>
+        {% else %}
+          <form action="{% url accounts_login %}" method="post">
+            {% csrf_token %}
+            <input type="text" name="username" />
+            <input type="password" name="password" />
+            <input type="submit" value="Login" />
+          </form>
+          <a href="{% url accounts_register %}">Registration</a>
+        {% endif %}
+      </div>
+      {% if messages %}
+        <div id="messages_container" class="prepend-1 span-22 append-1 last">
+          <div class="messages" class="span-24 last">
+            <ul class="messages_list">
+              {% for message in messages %}
+                <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+              {% endfor %}
+            </ul>
           </div>
         </div>
-
-      </div>
-
-
-      <div id="footer_container" class="span-24 last">
-        <div id="footer_content">
-          <div id="footer" class="span-23 last">
-            {% block footer %}
-              Tennis Wall
-            {% endblock %}
-          </div>
-        </div>
-      </div>
-
+      {% endif %}
     </div>
+
+    <div id="content_container" class="span-24 last">
+      <div id="content">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+
+  </div>
+
+
+  <div id="footer_container" class="span-24 last">
+    <div id="footer_content">
+      <div id="footer" class="span-23 last">
+        {% block footer %}
+          Tennis Wall
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+
+  </div>
 </body>
 </html>
