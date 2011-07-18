@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url
-from accounts.views import MyProfileView, MyProfileCreateView, ProfileView, MyProfileEditView
+from accounts.views import MyProfileView, MyProfileCreateView, ProfileView, MyProfileEditView, RegistrationView
 
 urlpatterns = patterns('',
     url(r'login/$',
@@ -13,7 +13,7 @@ urlpatterns = patterns('',
         name='accounts_logout'
     ),
     url(r'register/$',
-        'accounts.views.register',
+        RegistrationView.as_view(),
         name='accounts_register'
     ),
 
