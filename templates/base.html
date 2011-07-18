@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +20,13 @@
 
     <div id="header_container" class="span-24 last">
       <div id="header" class="span-16">
-        {% block header %}&nbsp;{% endblock %}
+        <div id="top_menu">
+          <ul class="menu vertical">
+            <li><a href="{% url root %}">{% trans 'Home' %}</a></li>
+            <li><a href="{% url walls_index %}">{% trans 'Walls' %}</a></li>
+          </ul>
+        </div>
+        {% block header %}{% endblock %}
       </div>
       <div id="auth_panel" class="span-8 last">
         {% if user.is_authenticated %}
@@ -36,16 +44,16 @@
             </div>
           </div>
           <div class="span-2 last">
-            <a href="{% url accounts_logout %}">Logout</a>
+            <a href="{% url accounts_logout %}">{% trans 'Logout' %}</a>
           </div>
         {% else %}
           <form action="{% url accounts_login %}" method="post">
             {% csrf_token %}
             <input type="text" name="username" />
             <input type="password" name="password" />
-            <input type="submit" value="Login" />
+            <input type="submit" value="{% trans 'Login' %}" />
           </form>
-          <a href="{% url accounts_register %}">Registration</a>
+          <a href="{% url accounts_register %}">{% trans 'Registration' %}</a>
         {% endif %}
       </div>
       {% if messages %}
