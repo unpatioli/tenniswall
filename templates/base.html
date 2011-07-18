@@ -24,7 +24,15 @@
             {% if user.is_authenticated %}
               <div id="user" class="prepend-3 span-3">
                 <div id="username">
-                  {{ user.username }}
+                  {% with user.get_profile as profile %}
+                    {% if profile %}
+                      <a href="{{ profile.get_absolute_url }}">
+                        {{ user.username }}
+                      </a>
+                    {% else %}
+                      {{ user.username }}
+                    {% endif %}
+                  {% endwith %}
                 </div>
               </div>
               <div class="span-2 last">
