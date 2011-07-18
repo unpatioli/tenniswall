@@ -1,9 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import redirect
+from django.utils.functional import lazy
 from django.utils.translation import ugettext as _
-from django.views.generic import DetailView, CreateView, UpdateView
+from django.views.generic import DetailView, CreateView, UpdateView, TemplateView
 from accounts.forms import  UserprofileForm, NewUserForm
 from accounts.models import UserProfile
 
@@ -11,14 +13,34 @@ class RegistrationView(CreateView):
     model = User
     form_class = NewUserForm
     template_name = 'accounts/user_form.html'
+    success_url = lazy(reverse, str)('accounts_register_thankyou')
 
     def form_valid(self, form):
+        username = form.cleaned_data['username']
+        self.request.session['registered_user_name'] = username
         messages.success(self.request, _('User is registered'))
         return super(RegistrationView, self).form_valid(form)
 
     def form_invalid(self, form):
         messages.error(self.request, _('User is not registered'))
         return super(RegistrationView, self).form_invalid(form)
+
+class ThankyouView(TemplateView):
+    template_name = 'accounts/thankyou.html'
+
+    def get_context_data(self, **kwargs):
+        registered_user_name = self.request.session.get('registered_user_name', False)
+        if not registered_user_name:
+            raise Http404()
+
+        try:
+            del self.request.session['registered_user_name']
+        except KeyError:
+            pass
+
+        context = super(ThankyouView, self).get_context_data(**kwargs)
+        context['registered_user_name'] = registered_user_name
+        return context
 
 class ProfileView(DetailView):
     model = UserProfile

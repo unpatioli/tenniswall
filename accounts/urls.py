@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url
-from accounts.views import MyProfileView, MyProfileCreateView, ProfileView, MyProfileEditView, RegistrationView
+from accounts.views import MyProfileView, MyProfileCreateView, ProfileView, MyProfileEditView, RegistrationView, ThankyouView
 
 urlpatterns = patterns('',
     url(r'login/$',
@@ -15,6 +15,10 @@ urlpatterns = patterns('',
     url(r'register/$',
         RegistrationView.as_view(),
         name='accounts_register'
+    ),
+    url(r'thankyou/$',
+        ThankyouView.as_view(),
+        name='accounts_register_thankyou'
     ),
 
     url(r'profile/(?P<pk>\d+)/$',
