@@ -1,16 +1,15 @@
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, CreateView, UpdateView
-from accounts.forms import  UserprofileForm
+from accounts.forms import  UserprofileForm, NewUserForm
 from accounts.models import UserProfile
 
 class RegistrationView(CreateView):
     model = User
-    form_class = UserCreationForm
+    form_class = NewUserForm
     template_name = 'accounts/user_form.html'
 
     def form_valid(self, form):
