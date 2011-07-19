@@ -1,3 +1,3 @@
 __all__ = ["models"]
 
-from models import FreeWall, PaidWall
+from models import Wall
