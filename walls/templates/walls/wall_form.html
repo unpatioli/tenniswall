@@ -1,0 +1,17 @@
+{% extends 'walls/base.html' %}
+{% load i18n %}
+{% load menu %}
+
+{% block header %}
+  {{ block.super }}
+  <div id="top_sub_submenu">
+    <ul class="menu horizontal">
+      <li>
+        {% link request walls_free_add %}{% trans 'Free' %}{% endlink %}
+      </li>
+      <li>
+        {% link request walls_paid_add %}{% trans 'Paid' %}{% endlink %}
+      </li>
+    </ul>
+  </div>
+{% endblock %}
