@@ -7,6 +7,9 @@ import settings
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    # Utility urls
+    url(r'^comments/', include('django.contrib.comments.urls')),
+
     # Examples:
     # url(r'^$', 'tenniswall.views.home', name='home'),
     # url(r'^tenniswall/', include('tenniswall.foo.urls')),
