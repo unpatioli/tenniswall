@@ -3,6 +3,7 @@
 {% load map_view %}
 {% load safe_output %}
 {% load models %}
+{% load comments %}
 
 {% block content %}
   <div id="wall_detail" class="span-24 last">
@@ -36,6 +37,15 @@
     <div id="wall_location" class="span-14 last">
       <h3>{% trans 'Location' %}</h3>
       {% map_view wall '10' '500px' '500px' %}
+    </div>
+  </div>
+
+  <div id="comments_container" class="span-24 last">
+    <div id="comments_list" class="span-24 last">
+      {% render_comment_list for object %}
+    </div>
+    <div id="comments_form" class="span-24 last">
+      {% render_comment_form for object %}
     </div>
   </div>
 {% endblock %}
