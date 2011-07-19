@@ -6,17 +6,14 @@ from django.utils.safestring import mark_safe
 class GoogleMapPickLocationWidget(Widget):
     class Media:
         js = (
-            'http://maps.google.com/maps/api/js?sensor=false',
-            #            'https://www.google.com/jsapi',
-            'https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js',
-            'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
+#            'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js',
 
             'js/mapper/gmap.js',
         )
         css = {
             'all': (
                 'css/mapper/gmap.css',
-                'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/sunny/jquery-ui.css',
+#                'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/sunny/jquery-ui.css',
             )
         }
 
@@ -62,11 +59,13 @@ class GoogleMapPickLocationWidget(Widget):
         # GMap's div tag
         tag = u"""
 <div %s></div>
+""" % flatatt(tag_attributes)
 
-<div id='dialog' title='Confirmation'>
-    <p>Delete marker?</p>
-</div>
-        """ % flatatt(tag_attributes)
+#        dialog = u"""
+#<div id='dialog' title='Confirmation'>
+#    <p>Delete marker?</p>
+#</div>
+#        """
 
         input = u'<input id="%(id)s" type="hidden" name="%(name)s" value="%(value)s" />' % {
             'id': field_id,
