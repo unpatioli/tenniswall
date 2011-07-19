@@ -1,0 +1,29 @@
+{% extends 'walls/base.html' %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{% trans 'Walls' %}</h1>
+  <div id="walls_list" class="span-24 last">
+    <div id="free_walls" class="span-12">
+      <h4>{% trans 'Free' %}</h4>
+      <ul>
+        {% for wall in free_walls %}
+          <li>
+            <a href="{% url walls_detail wall.pk %}">{{ wall }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  
+    <div id="paid_walls" class="span-12 last">
+      <h4>{% trans 'Paid' %}</h4>
+      <ul>
+        {% for wall in paid_walls %}
+          <li>
+            <a href="{% url walls_detail wall.pk %}">{{ wall }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}

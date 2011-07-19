@@ -1,0 +1,41 @@
+{% extends 'walls/base.html' %}
+{% load i18n %}
+{% load map_view %}
+{% load safe_output %}
+{% load models %}
+
+{% block content %}
+  <div id="wall_detail" class="span-24 last">
+    {% ifcanedit request.user object %}
+      <div id="object_controls" class="object_controls span-24 last">
+        <div>
+          <a href="{% url walls_edit object.pk %}">{% trans 'Edit' %}</a>
+        </div>
+      </div>
+    {% endifcanedit %}
+    <div id="wall_info" class="span-10">
+      <div>
+        <h3>{% trans 'Address' %}</h3>
+        {{ object.address }}
+      </div>
+      <div>
+        <h3>{% trans 'Price' %}</h3>
+
+        {% if object.is_paid %}
+          {{ object.price }} / {{ object.get_period_display }}
+        {% else %}
+          {% trans 'Free' %}
+        {% endif %}
+      </div>
+      <div>
+        <h3>{% trans 'Description' %}</h3>
+        {% safe_html object.description %}
+      </div>
+    </div>
+
+    <div id="wall_location" class="span-14 last">
+      <h3>{% trans 'Location' %}</h3>
+      {% map_view wall '10' '500px' '500px' %}
+    </div>
+  </div>
+{% endblock %}
