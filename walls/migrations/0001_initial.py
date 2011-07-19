@@ -8,8 +8,8 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'PaidWall'
-        db.create_table('walls_paidwall', (
+        # Adding model 'Wall'
+        db.create_table('walls_wall', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
@@ -19,33 +19,17 @@ class Migration(SchemaMigration):
             ('location', self.gf('django.contrib.gis.db.models.fields.PointField')()),
             ('reported_by', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('address', self.gf('django.db.models.fields.CharField')(max_length=250)),
-            ('price', self.gf('django.db.models.fields.IntegerField')()),
-            ('period', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('price', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('period', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
         ))
-        db.send_create_signal('walls', ['PaidWall'])
-
-        # Adding model 'FreeWall'
-        db.create_table('walls_freewall', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('deleted_at', self.gf('django.db.models.fields.DateTimeField')(default=None, null=True, blank=True)),
-            ('approved_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('banned_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('location', self.gf('django.contrib.gis.db.models.fields.PointField')()),
-            ('reported_by', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('address', self.gf('django.db.models.fields.CharField')(max_length=250)),
-        ))
-        db.send_create_signal('walls', ['FreeWall'])
+        db.send_create_signal('walls', ['Wall'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'PaidWall'
-        db.delete_table('walls_paidwall')
-
-        # Deleting model 'FreeWall'
-        db.delete_table('walls_freewall')
+        # Deleting model 'Wall'
+        db.delete_table('walls_wall')
 
 
     models = {
@@ -85,29 +69,18 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'walls.freewall': {
-            'Meta': {'object_name': 'FreeWall'},
+        'walls.wall': {
+            'Meta': {'object_name': 'Wall'},
             'address': ('django.db.models.fields.CharField', [], {'max_length': '250'}),
             'approved_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'banned_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'deleted_at': ('django.db.models.fields.DateTimeField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
+            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'location': ('django.contrib.gis.db.models.fields.PointField', [], {}),
-            'reported_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
-        },
-        'walls.paidwall': {
-            'Meta': {'object_name': 'PaidWall'},
-            'address': ('django.db.models.fields.CharField', [], {'max_length': '250'}),
-            'approved_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'banned_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'deleted_at': ('django.db.models.fields.DateTimeField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'location': ('django.contrib.gis.db.models.fields.PointField', [], {}),
-            'period': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'price': ('django.db.models.fields.IntegerField', [], {}),
+            'period': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'}),
+            'price': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'reported_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         }
