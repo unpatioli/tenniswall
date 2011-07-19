@@ -70,6 +70,16 @@ class MyProfileCreateView(CreateView):
     model = UserProfile
     form_class = UserprofileForm
 
+    def get(self, request, *args, **kwargs):
+        if self._check_profile_exists(request.user):
+            return redirect('accounts_my_profile')
+        return super(MyProfileCreateView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if self._check_profile_exists(request.user):
+            return redirect('accounts_my_profile')
+        return super(MyProfileCreateView, self).get(request, *args, **kwargs)
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
@@ -80,6 +90,9 @@ class MyProfileCreateView(CreateView):
     def form_invalid(self, form):
         messages.error(self.request, _('User profile is not created'))
         return super(MyProfileCreateView, self).form_invalid(form)
+
+    def _check_profile_exists(self, user):
+        return UserProfile.objects.filter(user=user).exists()
 
 class MyProfileEditView(UpdateView):
     model = UserProfile
