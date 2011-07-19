@@ -1,16 +1,11 @@
 from django.contrib.gis import forms as geoforms
 from mapper.widgets import GoogleMapPickLocationWidget
-from walls.models import FreeWall, PaidWall
+from walls.models.models import Wall
 
-class LocationWidgets:
-    widgets = {
-        'location': GoogleMapPickLocationWidget()
-    }
+class WallForm(geoforms.ModelForm):
+    class Meta:
+        model = Wall
 
-class FreeWallForm(geoforms.ModelForm):
-    class Meta(LocationWidgets):
-        model = FreeWall
-
-class PaidWallForm(geoforms.ModelForm):
-    class Meta(LocationWidgets):
-        model = PaidWall
+        widgets = {
+            'location': GoogleMapPickLocationWidget(),
+        }

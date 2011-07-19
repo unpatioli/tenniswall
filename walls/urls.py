@@ -1,27 +1,39 @@
 from django.conf.urls.defaults import patterns, url
 from django.contrib.auth.decorators import login_required
-from walls.views import AddPaidView, AddFreeView
+from django.views.generic import DetailView, ListView
+from walls.models import Wall
+from walls.views import AddWallView, IndexView, EditWallView
 
 urlpatterns = patterns('',
     url(r'^$',
-        'walls.views.index',
+        IndexView.as_view(),
         name='walls_index'
     ),
-    url(r'paid/$',
-        'walls.views.index',
-        name='walls_paid'
-    ),
     url(r'free/$',
-        'walls.views.index',
+        ListView.as_view(
+            queryset=Wall.free.all()
+        ),
         name='walls_free'
     ),
-
-    url(r'^paid/add/$',
-        login_required(AddPaidView.as_view()),
-        name='walls_paid_add'
+    url(r'paid/$',
+        ListView.as_view(
+            queryset=Wall.paid.all()
+        ),
+        name='walls_paid'
     ),
-    url(r'^free/add/$',
-        login_required(AddFreeView.as_view()),
-        name='walls_free_add'
-    )
+
+    url(r'^(?P<pk>\d+)/$',
+        DetailView.as_view(
+            model=Wall
+        ),
+        name='walls_detail'
+    ),
+    url(r'^(?P<pk>\d+)/edit/$',
+        login_required(EditWallView.as_view()),
+        name='walls_edit'
+    ),
+    url(r'^add/$',
+        login_required(AddWallView.as_view()),
+        name='walls_add'
+    ),
 )
