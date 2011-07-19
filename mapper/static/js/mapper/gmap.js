@@ -41,19 +41,19 @@ $(function () {
                 + ")";
     }
 
-    $("#dialog").dialog({
-        autoOpen: false,
-        resizable: false,
-        modal: true,
-        buttons: {
-            "Yes": function() {
-                marker.setMap(null);
-                $(this).dialog('close');
-            },
-            "No": function() {
-                $(this).dialog('close');
-            }
-        }
-    });
+//    $("#dialog").dialog({
+//        autoOpen: false,
+//        resizable: false,
+//        modal: true,
+//        buttons: {
+//            "Yes": function() {
+//                marker.setMap(null);
+//                $(this).dialog('close');
+//            },
+//            "No": function() {
+//                $(this).dialog('close');
+//            }
+//        }
+//    });
 
 });
