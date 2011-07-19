@@ -33,6 +33,9 @@ class UserProfile(models.Model):
     def can_show(self):
         return not self.is_closed
 
+    def can_edit(self, user):
+        return self.user == user
+
 def user_created_handler(sender, instance, created, **kwargs):
     if created:
         instance.userprofile_set.create()
