@@ -1,5 +1,28 @@
 {% extends 'accounts/base.html' %}
+{% load i18n %}
+{% load models %}
 
 {% block content %}
-  Hello!
+  <div id="profile_detail" class="span-24 last">
+    {% ifcanedit request.user object %}
+      <div id="object_controls" class="object_controls span-24 last">
+        <div>
+          <a href="{% url accounts_my_profile_edit %}">{% trans 'Edit' %}</a>
+        </div>
+      </div>
+    {% endifcanedit %}
+    
+    <div id="profile_info" class="span-10">
+      <div>
+        <h3>{% trans 'Birthday' %}</h3>
+        {{ object.birthday }}
+      </div>
+    </div>
+    <div id="profile_other" class="span-14 last">
+      <div>
+        <h3>{% trans 'Sex' %}</h3>
+        {{ object.get_sex_display }}
+      </div>
+    </div>
+  </div>
 {% endblock %}
