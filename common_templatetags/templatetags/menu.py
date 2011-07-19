@@ -1,5 +1,4 @@
 from django import template
-from django.core.urlresolvers import reverse
 
 register = template.Library()
 
@@ -23,7 +22,9 @@ class LinkNode(template.Node):
         self.nodelist = nodelist
 
     def render(self, context):
-        import re
+        from django.core.urlresolvers import reverse
+#        import re
+        
         pattern = reverse(self.url_name)
         output = self.nodelist.render(context)
         try:
