@@ -1,3 +1,4 @@
-__all__ = ["models"]
+from walls import Wall
+from comments import WallComment
 
-from models import Wall
+__all__ = ['Wall', 'WallComment']
