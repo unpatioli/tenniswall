@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.views.generic import CreateView, TemplateView, UpdateView
 from django.utils.translation import ugettext as _
 from walls.forms import WallForm
-from walls.models.models import Wall
+from walls.models import Wall
 
 class IndexView(TemplateView):
     template_name = 'walls/index.html'
