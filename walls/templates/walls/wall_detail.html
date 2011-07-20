@@ -1,5 +1,5 @@
 {% extends 'walls/base.html' %}
-{% load i18n map_view safe_output models comments %}
+{% load i18n map_view safe_output models %}
 
 {% block content %}
   <div id="wall_detail" class="span-24 last">
@@ -38,10 +38,8 @@
 
   <div id="comments_container" class="span-24 last">
     <div id="comments_list" class="span-24 last">
-      {% render_comment_list for object %}
     </div>
     <div id="comments_form" class="span-24 last">
-      {% render_comment_form for object %}
     </div>
   </div>
 {% endblock %}
