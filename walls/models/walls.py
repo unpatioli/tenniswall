@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -7,10 +8,18 @@ from util import Timestamps, Paranoid, Ban
 from geo import Location
 
 class DisplayManager(Location.objects.__class__):
+    def __init__(self, only_approved=False):
+        super(DisplayManager, self).__init__()
+        self.only_approved = only_approved
+
     def get_query_set(self):
-        return super(DisplayManager, self).get_query_set().filter(
-            deleted_at=None
+        query_set = super(DisplayManager, self).get_query_set().filter(
+            deleted_at=None,
+            banned_at=None
         )
+        if self.only_approved:
+            query_set = query_set.filter(approved_at__lte=datetime.now())
+        return query_set
 
 class PaidManager(DisplayManager):
     def get_query_set(self):
@@ -19,6 +28,7 @@ class PaidManager(DisplayManager):
 class FreeManager(DisplayManager):
     def get_query_set(self):
         return super(FreeManager, self).get_query_set().filter(price = 0)
+
 
 class Wall(Timestamps, Paranoid, Location, Ban):
     PERIOD_CHOICES = (
