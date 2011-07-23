@@ -1,6 +1,12 @@
 {% extends 'welcome/base.html' %}
 {% load i18n %}
 
+{% block head %}
+  {% include '_google_maps_api.html' %}
+  
+  <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/front_page_map.js"></script>
+{% endblock %}
+
 {% block content %}
     <h1>{% trans 'Welcome' %}!</h1>
 {% endblock %}
