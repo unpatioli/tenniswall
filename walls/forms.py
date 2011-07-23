@@ -1,6 +1,7 @@
+from django import forms
 from django.contrib.gis import forms as geoforms
 from mapper.widgets import GoogleMapPickLocationWidget
-from walls.models import Wall
+from walls.models import Wall, WallComment
 
 class WallForm(geoforms.ModelForm):
     class Meta:
@@ -9,3 +10,7 @@ class WallForm(geoforms.ModelForm):
         widgets = {
             'location': GoogleMapPickLocationWidget(),
         }
+
+class WallCommentForm(forms.ModelForm):
+    class Meta:
+        model = WallComment
