@@ -6,11 +6,17 @@ from django.utils.translation import ugettext as _
 from util import Timestamps, Paranoid, Ban
 from geo import Location
 
-class PaidManager(models.Manager):
+class DisplayManager(Location.objects.__class__):
+    def get_query_set(self):
+        return super(DisplayManager, self).get_query_set().filter(
+            deleted_at=None
+        )
+
+class PaidManager(DisplayManager):
     def get_query_set(self):
         return super(PaidManager, self).get_query_set().filter(price__gt = 0)
 
-class FreeManager(models.Manager):
+class FreeManager(DisplayManager):
     def get_query_set(self):
         return super(FreeManager, self).get_query_set().filter(price = 0)
 
@@ -35,7 +41,7 @@ class Wall(Timestamps, Paranoid, Location, Ban):
         ordering = ['-created_at']
 
     # Managers
-    objects = models.Manager()
+    objects = DisplayManager()
     free = FreeManager()
     paid = PaidManager()
 
