@@ -1,8 +1,9 @@
 from django.conf.urls.defaults import patterns, url
 from django.contrib.auth.decorators import login_required
-from django.views.generic import DetailView, ListView
+from django.views.generic import  ListView
 from walls.models import Wall
-from walls.views import AddWallView, IndexView, EditWallView
+from walls.views import AddWallView, IndexView, EditWallView,\
+    CommentedWallDetailView
 
 urlpatterns = patterns('',
     url(r'^$',
@@ -23,9 +24,7 @@ urlpatterns = patterns('',
     ),
 
     url(r'^(?P<pk>\d+)/$',
-        DetailView.as_view(
-            model=Wall
-        ),
+        CommentedWallDetailView.as_view(),
         name='walls_detail'
     ),
     url(r'^(?P<pk>\d+)/edit/$',
