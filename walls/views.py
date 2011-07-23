@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
-from django.views.generic import CreateView, TemplateView, UpdateView
+from django.views.generic import CreateView, TemplateView, UpdateView, DeleteView
 from django.utils.translation import ugettext as _
 from django.views.generic.detail import   DetailView
 from walls.forms import WallForm, WallCommentForm
@@ -58,6 +58,22 @@ class EditWallView(UpdateView):
         messages.error(self.request, _('Wall is not updated'))
         return super(EditWallView, self).form_invalid(form)
 
+class DeleteWallView(DeleteView):
+    model = Wall
+
+    def get_object(self, queryset=None):
+        wall = super(DeleteWallView, self).get_object(queryset)
+        if not wall.can_delete(self.request.user):
+            raise Http404
+        return wall
+
+    def get_success_url(self):
+        return reverse('walls_index')
+
+    def delete(self, request, *args, **kwargs):
+        res = super(DeleteWallView, self).delete(request, *args, **kwargs)
+        messages.success(request, _('Wall deleted'))
+        return res
 
 class CommentedDetailView(DetailView):
     comment_form_class = None
