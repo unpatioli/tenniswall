@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import  ListView
 from walls.models import Wall
 from walls.views import AddWallView, IndexView, EditWallView,\
-    CommentedWallDetailView
+    CommentedWallDetailView, DeleteWallView
 
 urlpatterns = patterns('',
     url(r'^$',
@@ -30,6 +30,10 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/edit/$',
         login_required(EditWallView.as_view()),
         name='walls_edit'
+    ),
+    url(r'^(?P<pk>\d+)/delete/$',
+        login_required(DeleteWallView.as_view()),
+        name='walls_delete'
     ),
     url(r'^add/$',
         login_required(AddWallView.as_view()),
