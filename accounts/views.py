@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.utils.functional import lazy
 from django.utils.translation import ugettext as _
 from django.views.generic import DetailView, CreateView, UpdateView, TemplateView
@@ -44,6 +44,10 @@ class ThankyouView(TemplateView):
 
 class ProfileView(DetailView):
     model = UserProfile
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(UserProfile, user__pk=pk)
 
     def get(self, request, **kwargs):
         if (request.user.is_authenticated()
