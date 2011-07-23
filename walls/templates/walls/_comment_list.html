@@ -1,0 +1,26 @@
+{% load i18n %}
+{% load url from future %}
+
+{% if comments %}
+  <ul>
+    {% for comment in comments %}
+      <li class="span-24 last">
+        <div class="span-4">
+          <div class="span-4 last">
+            <a href="{% url 'accounts_profile' comment.author.pk %}">
+              {{ comment.author }}
+            </a>
+          </div>
+          <div class="span-4 last">
+            {{ comment.created_at }}
+          </div>
+        </div>
+        <div class="span-20 last">
+          {{ comment }}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  {% trans 'There is no comments' %}
+{% endif %}

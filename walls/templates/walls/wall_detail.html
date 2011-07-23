@@ -45,13 +45,7 @@
 
   <div id="comments_container" class="span-24 last">
     <div id="comments_list" class="span-24 last">
-      {% if comments %}
-        <ul>
-          {% for comment in comments %}
-            <li>{{ comment }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+      {% include 'walls/_comment_list.html' %}
     </div>
     <div id="comments_form" class="span-24 last">
       {% if user.is_authenticated %}
