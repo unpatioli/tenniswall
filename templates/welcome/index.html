@@ -3,6 +3,8 @@
 
 {% block head %}
   {% include '_google_maps_api.html' %}
+
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/main_map.css" type="text/css" media="screen">
   
   <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/front_page_map.js"></script>
 {% endblock %}
