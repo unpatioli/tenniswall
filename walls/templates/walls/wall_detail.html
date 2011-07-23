@@ -3,13 +3,20 @@
 
 {% block content %}
   <div id="wall_detail" class="span-24 last">
-    {% ifcanedit request.user object %}
-      <div id="object_controls" class="object_controls span-24 last">
-        <div>
-          <a href="{% url walls_edit object.pk %}">{% trans 'Edit' %}</a>
-        </div>
-      </div>
-    {% endifcanedit %}
+    <div id="object_controls" class="object_controls span-24 last">
+      <ul class="menu horizontal">
+        {% ifcan request.user 'edit' object %}
+          <li>
+            <a href="{% url walls_edit object.pk %}">{% trans 'Edit' %}</a>
+          </li>
+        {% endifcan %}
+        {% ifcan request.user 'delete' object %}
+          <li>
+            <a href="{% url walls_delete object.pk %}">{% trans 'Delete' %}</a>
+          </li>
+        {% endifcan %}
+      </ul>
+    </div>
     <div id="wall_info" class="span-10">
       <div>
         <h3>{% trans 'Address' %}</h3>
