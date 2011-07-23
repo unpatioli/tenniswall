@@ -1,0 +1,23 @@
+/* application.css */
+
+/* Our own customizations are nicely tucked in a separate file, yay! */
+*
+{
+    text-align: left;
+}
+
+#footer
+{
+    background: #f0f0ff;
+
+    /* We can over-ride default settings here instead of changing the original
+       sticky-footer.css */
+    padding-top: 20px;
+    height: 150px;
+    margin-top: -170px;
+}
+
+#main
+{
+    padding-bottom: 170px;
+}

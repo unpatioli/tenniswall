@@ -12,6 +12,10 @@
   <link rel="stylesheet" href="{{ STATIC_URL }}css/blueprint/print.css" type="text/css" media="print">
   <!--[if lt IE 8]><link rel="stylesheet" href="{{ STATIC_URL }}css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
 
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/sticky-footer.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/application.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/main_map.css" type="text/css" media="screen">
+
   <link rel="stylesheet" href="{{ STATIC_URL }}css/menu.css" type="text/css" media="screen">
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
@@ -19,84 +23,83 @@
   {% block head %}{% endblock %}
 </head>
 <body class="bp">
-  <div id="container" class="container">
-  <div id="main_container">
+  <div id="wrap">
+    <div id="main" class="container">
+      <div id="main_container" class="span-24 last">
 
-    <div id="header_container" class="span-24 last">
-      <div id="header" class="span-16">
-        <div id="top_menu">
-          <ul class="menu horizontal">
-            <li>
-              {% link request root %}{% trans 'Home' %}{% endlink %}
-            </li>
-            <li>
-              {% link request walls_index %}{% trans 'Walls' %}{% endlink %}
-            </li>
-          </ul>
-        </div>
-        {% block header %}{% endblock %}
-      </div>
-      <div id="auth_panel" class="span-8 last">
-        {% if user.is_authenticated %}
-          <div id="user" class="prepend-3 span-3">
-            <div id="username">
-              {% with user.get_profile as profile %}
-                {% if profile %}
-                  <a href="{{ profile.get_absolute_url }}">
-                    {{ user.username }}
-                  </a>
-                {% else %}
-                  {{ user.username }}
-                {% endif %}
-              {% endwith %}
+        <div id="header_container" class="span-24 last">
+          <div id="header" class="span-16">
+            <div id="top_menu" class="span-16 last">
+              <ul class="menu horizontal">
+                <li>
+                  {% link request root %}{% trans 'Home' %}{% endlink %}
+                </li>
+                <li>
+                  {% link request walls_index %}{% trans 'Walls' %}{% endlink %}
+                </li>
+              </ul>
             </div>
+            {% block header %}{% endblock %}
           </div>
-          <div class="span-2 last">
-            <a href="{% url accounts_logout %}">{% trans 'Logout' %}</a>
+          <div id="auth_panel" class="span-8 last">
+            {% if user.is_authenticated %}
+              <div id="user" class="prepend-3 span-3">
+                <div id="username" class="span-3 last">
+                  {% with user.get_profile as profile %}
+                    {% if profile %}
+                      <a href="{{ profile.get_absolute_url }}">
+                        {{ user.username }}
+                      </a>
+                    {% else %}
+                      {{ user.username }}
+                    {% endif %}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="span-2 last">
+                <a href="{% url accounts_logout %}">{% trans 'Logout' %}</a>
+              </div>
+            {% else %}
+              <form action="{% url accounts_login %}" method="post">
+                {% csrf_token %}
+                <input type="text" name="username" />
+                <input type="password" name="password" />
+                <input type="hidden" name="next" value="{{ request.path }}" />
+                <input type="submit" value="{% trans 'Login' %}" />
+              </form>
+              <a href="{% url accounts_register %}">{% trans 'Registration' %}</a>
+            {% endif %}
           </div>
-        {% else %}
-          <form action="{% url accounts_login %}" method="post">
-            {% csrf_token %}
-            <input type="text" name="username" />
-            <input type="password" name="password" />
-            <input type="hidden" name="next" value="{{ request.path }}" />
-            <input type="submit" value="{% trans 'Login' %}" />
-          </form>
-          <a href="{% url accounts_register %}">{% trans 'Registration' %}</a>
-        {% endif %}
-      </div>
-      {% if messages %}
-        <div id="messages_container" class="prepend-1 span-22 append-1 last">
-          <div class="messages" class="span-24 last">
-            <ul class="messages_list">
-              {% for message in messages %}
-                <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
-              {% endfor %}
-            </ul>
+          {% if messages %}
+            <div id="messages_container" class="prepend-1 span-22 append-1 last">
+              <div class="messages" class="span-24 last">
+                <ul class="messages_list">
+                  {% for message in messages %}
+                    <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        <div id="content_container" class="span-24 last">
+          <div id="content" class="span-24 last">
+            {% block content %}{% endblock %}
           </div>
         </div>
-      {% endif %}
-    </div>
 
-    <div id="content_container" class="span-24 last">
-      <div id="content">
-        {% block content %}{% endblock %}
       </div>
-    </div>
 
-  </div>
-
-
-  <div id="footer_container" class="span-24 last">
-    <div id="footer_content">
-      <div id="footer" class="span-23 last">
-        {% block footer %}
-          Tennis Wall
-        {% endblock %}
-      </div>
     </div>
   </div>
 
+  <div id="footer" class="container">
+    <div id="footer_content" class="span-24 last">
+      {% block footer %}
+        Tennis Wall
+      {% endblock %}
+    </div>
   </div>
 </body>
 </html>
