@@ -14,3 +14,5 @@ class WallForm(geoforms.ModelForm):
 class WallCommentForm(forms.ModelForm):
     class Meta:
         model = WallComment
+
+        fields = ('comment',)
