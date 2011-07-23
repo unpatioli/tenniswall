@@ -1,19 +1,23 @@
 {% load i18n %}
 
-<form action="." method="post">
-  {% csrf_token %}
+{% if user.is_authenticated %}
+  <form action="." method="post">
+    {% csrf_token %}
 
-  {% for field in comment_form %}
-    {% if field.is_hidden %}
-      <div>{{ field }}</div>
-    {% else %}
-      {% if field.errors %}{{ field.errors }}{% endif %}
-      <p class="{% if field.errors %}error{% endif %}"
-        {% if field.name == "honeypot" %} style="display:none;"{% endif %}>
-          {{ field.label_tag }} {{ field }}
-      </p>
-    {% endif %}
-  {% endfor %}
+    {% for field in comment_form %}
+      {% if field.is_hidden %}
+        <div>{{ field }}</div>
+      {% else %}
+        {% if field.errors %}{{ field.errors }}{% endif %}
+        <p class="{% if field.errors %}error{% endif %}"
+          {% if field.name == "honeypot" %} style="display:none;"{% endif %}>
+            {{ field.label_tag }} {{ field }}
+        </p>
+      {% endif %}
+    {% endfor %}
 
-  <input type="submit" value="{% trans 'Post' %}" />
-</form>
+    <input type="submit" value="{% trans 'Post' %}" />
+  </form>
+{% else %}
+  {% trans 'Log in to add a comment' %}
+{% endif %}

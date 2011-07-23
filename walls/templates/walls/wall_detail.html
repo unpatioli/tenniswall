@@ -48,11 +48,7 @@
       {% include 'walls/_comment_list.html' %}
     </div>
     <div id="comments_form" class="span-24 last">
-      {% if user.is_authenticated %}
-        {% include 'walls/_comment_form.html' %}
-      {% else %}
-        {% trans 'Log in to add a comment' %}
-      {% endif %}
+      {% include 'walls/_comment_form.html' %}
     </div>
   </div>
 {% endblock %}
