@@ -2,22 +2,27 @@ from django import template
 
 register = template.Library()
 
-@register.tag(name='ifcanedit')
-def do_ifcanedit(parser, token):
+@register.tag(name='ifcan')
+def do_ifcan(parser, token):
     try:
-        tag_name, user, obj_name = token.split_contents()
+        tag_name, user, action, obj_name = token.split_contents()
     except ValueError:
         raise template.TemplateSyntaxError(
-            '%r tag requires two arguments' % token.contents.split()[0]
+            '%r tag requires three arguments' % token.contents.split()[0]
+        )
+    if not(action[0] == action[-1] and action[0] in ('"', "'")):
+        raise template.TemplateSyntaxError(
+            "%r tag's argument should be in quotes" % tag_name
         )
 
-    nodelist = parser.parse(('endifcanedit',))
+    nodelist = parser.parse(('endifcan',))
     parser.delete_first_token()
-    return IfcaneditNode(user, obj_name, nodelist)
+    return IfcanNode(user, action[1:-1], obj_name, nodelist)
 
-class IfcaneditNode(template.Node):
-    def __init__(self, user, obj_name, nodelist):
+class IfcanNode(template.Node):
+    def __init__(self, user, action, obj_name, nodelist):
         self.user = template.Variable(user)
+        self.action = action
         self.obj = template.Variable(obj_name)
         self.nodelist = nodelist
 
@@ -28,7 +33,8 @@ class IfcaneditNode(template.Node):
         except template.VariableDoesNotExist:
             return ''
 
-        if actual_obj.can_edit(actual_user):
+        can = getattr(actual_obj, 'can_' + self.action)
+        if can(actual_user):
             return self.nodelist.render(context)
         else:
             return ''
