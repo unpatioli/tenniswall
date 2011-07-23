@@ -3,13 +3,13 @@
 
 {% block content %}
   <div id="profile_detail" class="span-24 last">
-    {% ifcanedit request.user object %}
+    {% ifcan request.user 'edit' object %}
       <div id="object_controls" class="object_controls span-24 last">
         <div>
           <a href="{% url accounts_my_profile_edit %}">{% trans 'Edit' %}</a>
         </div>
       </div>
-    {% endifcanedit %}
+    {% endifcan %}
     
     <div id="profile_info" class="span-10">
       <div>
