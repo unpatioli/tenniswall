@@ -15,7 +15,7 @@ class WallComment(Timestamps, Paranoid, Ban):
     author = models.ForeignKey(User, editable=False)
     wall = models.ForeignKey(Wall, editable=False)
 
-    ip = models.IPAddressField(editable=False)
+    ip = models.IPAddressField(blank=True, null=True, editable=False)
     comment = models.TextField()
 
     is_public = models.BooleanField(default=True)
