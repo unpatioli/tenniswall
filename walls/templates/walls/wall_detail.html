@@ -38,8 +38,20 @@
 
   <div id="comments_container" class="span-24 last">
     <div id="comments_list" class="span-24 last">
+      {% if comments %}
+        <ul>
+          {% for comment in comments %}
+            <li>{{ comment }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
     <div id="comments_form" class="span-24 last">
+      {% if user.is_authenticated %}
+        {% include 'walls/_comment_form.html' %}
+      {% else %}
+        {% trans 'Log in to add a comment' %}
+      {% endif %}
     </div>
   </div>
 {% endblock %}
