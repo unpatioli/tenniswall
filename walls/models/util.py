@@ -20,6 +20,12 @@ class Paranoid(models.Model):
     class Meta:
         abstract = True
 
+    def delete(self, using=None):
+        from datetime import datetime
+
+        self.deleted_at = datetime.now()
+        self.save()
+
 @receiver(pre_save, sender=Paranoid, dispatch_uid="Paranoid_connector")
 def paranoid(sender, **kwargs):
     from datetime import datetime
