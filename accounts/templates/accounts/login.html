@@ -1,10 +1,27 @@
 {% extends 'accounts/base.html' %}
 {% load i18n %}
+{% load url from future %}
 
 {% block content %}
-  <form action="" method="post">
+  {% if form.errors %}
+    <p>{% trans "Your username and password didn't match. Please try again." %}</p>
+  {% endif %}
+
+  <form action="{% url 'django.contrib.auth.views.login' %}" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+
+    <table>
+      <tr>
+        <td>{{ form.username.label_tag }}</td>
+        <td>{{ form.username }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.password.label_tag }}</td>
+        <td>{{ form.password }}</td>
+      </tr>
+    </table>
+
     <input type="submit" value={% trans 'Login' %} />
+    <input type="hidden" name="next" value="{{ next }}" />
   </form>
 {% endblock %}
