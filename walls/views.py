@@ -2,7 +2,7 @@
 from django.contrib import messages
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.views.generic import CreateView, TemplateView, UpdateView, DeleteView
 from django.utils.translation import ugettext as _
 from django.views.generic.detail import   DetailView
@@ -17,18 +17,19 @@ class IndexView(TemplateView):
         context.update({
             'free_walls': Wall.free.all()[:10],
             'paid_walls': Wall.paid.all()[:10],
-        })
+            })
         return context
+
 
 class AddWallView(CreateView):
     model = Wall
     form_class = WallForm
-    
-#    def get_initial(self):
-#        initials = super(AddWallView, self).get_initial()
-#        initials.update({'reported_by': self.request.user})
-#        return initials
-        
+
+    #    def get_initial(self):
+    #        initials = super(AddWallView, self).get_initial()
+    #        initials.update({'reported_by': self.request.user})
+    #        return initials
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.reported_by = self.request.user
@@ -39,6 +40,7 @@ class AddWallView(CreateView):
     def form_invalid(self, form):
         messages.error(self.request, _('Wall is not saved'))
         return super(AddWallView, self).form_invalid(form)
+
 
 class EditWallView(UpdateView):
     model = Wall
@@ -58,6 +60,7 @@ class EditWallView(UpdateView):
         messages.error(self.request, _('Wall is not updated'))
         return super(EditWallView, self).form_invalid(form)
 
+
 class DeleteWallView(DeleteView):
     model = Wall
 
@@ -74,6 +77,7 @@ class DeleteWallView(DeleteView):
         res = super(DeleteWallView, self).delete(request, *args, **kwargs)
         messages.success(request, _('Wall deleted'))
         return res
+
 
 class CommentedDetailView(DetailView):
     comment_form_class = None
@@ -102,9 +106,9 @@ class CommentedDetailView(DetailView):
         context = super(CommentedDetailView, self).get_context_data(**kwargs)
         context.update({
             'comments': self.get_comment_queryset().filter(**{
-                            self.comment_target_field_name: self.object,
-                        }),
-        })
+                self.comment_target_field_name: self.object,
+                }),
+            })
         return context
 
     def get_success_url(self):
@@ -154,7 +158,7 @@ class CommentedWallDetailView(CommentedDetailView):
     comment_target_field_name = 'wall'
 
     def get_success_url(self):
-        return reverse('walls_detail', args=[self.object.pk,])
+        return reverse('walls_detail', args=[self.object.pk, ])
 
     def form_save(self, form):
         self.object = self.get_object()
@@ -163,3 +167,37 @@ class CommentedWallDetailView(CommentedDetailView):
         comment.wall = self.object
         comment.ip = self.request.META.get("REMOTE_ADDR", None)
         comment.save()
+
+
+def bbox(request):
+    from django.utils import simplejson
+    import random
+
+    if request.is_ajax():
+        if request.method == 'POST':
+            json_data = simplejson.loads(request.raw_post_data)
+            try:
+                lats = [
+                    float(json_data['sw']['lat']),
+                    float(json_data['ne']['lat'])
+                ]
+                lngs = [
+                    float(json_data['sw']['lng']),
+                    float(json_data['ne']['lng'])
+                ]
+            except (ValueError, KeyError):
+                raise Http404
+
+            try:
+                num = int(json_data.get('num', 2))
+            except ValueError:
+                num = 2
+            markers = []
+            for i in xrange(num):
+                markers.append({
+                    'lat': random.uniform(*lats),
+                    'lng': random.uniform(*lngs)
+                })
+            return HttpResponse(simplejson.dumps(markers),
+                                mimetype="application/json; charset=utf-8")
+    raise Http404
