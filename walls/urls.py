@@ -39,4 +39,9 @@ urlpatterns = patterns('',
         login_required(AddWallView.as_view()),
         name='walls_add'
     ),
+
+    url(r'^bbox.json/$',
+        'walls.views.bbox',
+        name='walls_bbox'
+    ),
 )
