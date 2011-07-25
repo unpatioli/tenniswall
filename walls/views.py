@@ -1,5 +1,6 @@
 # Create your views here.
 from django.contrib import messages
+from django.contrib.gis.geos import Polygon
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
@@ -171,33 +172,49 @@ class CommentedWallDetailView(CommentedDetailView):
 
 def bbox(request):
     from django.utils import simplejson
-    import random
 
     if request.is_ajax():
         if request.method == 'POST':
+            # Process JSON with bbox
             json_data = simplejson.loads(request.raw_post_data)
             try:
-                lats = [
-                    float(json_data['sw']['lat']),
-                    float(json_data['ne']['lat'])
-                ]
-                lngs = [
-                    float(json_data['sw']['lng']),
-                    float(json_data['ne']['lng'])
-                ]
+                sw_lat = float(json_data['sw']['lat'])
+                sw_lng = float(json_data['sw']['lng'])
+
+                ne_lat = float(json_data['ne']['lat'])
+                ne_lng = float(json_data['ne']['lng'])
             except (ValueError, KeyError):
                 raise Http404
 
+            # Create bbox
+            bbox_coords = [
+                (sw_lat, sw_lng),
+                (sw_lat, ne_lng),
+                (ne_lat, ne_lng),
+                (ne_lat, sw_lng),
+                (sw_lat, sw_lng),
+            ]
+            bbox_polygon = Polygon(bbox_coords)
+
+            # Process walls limit number
             try:
                 num = int(json_data.get('num', 2))
             except ValueError:
                 num = 2
-            markers = []
-            for i in xrange(num):
-                markers.append({
-                    'lat': random.uniform(*lats),
-                    'lng': random.uniform(*lngs)
-                })
+
+            # Get walls in bbox
+            walls = Wall.objects.filter(
+                location__contained = bbox_polygon
+            )[:num]
+
+            # Assemble walls list
+            markers = [{
+                'lat': wall.location.x,
+                'lng': wall.location.y,
+                'title': unicode(wall),
+                'info': wall.description,
+            } for wall in walls]
+
             return HttpResponse(simplejson.dumps(markers),
                                 mimetype="application/json; charset=utf-8")
     raise Http404
