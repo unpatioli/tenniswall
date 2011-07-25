@@ -5,9 +5,6 @@ $(function(){
     });
     $("#content").append(map_div);
 
-    var debug = $('<div></div>')
-    $("#content").append(debug);
-
     var latlng = new google.maps.LatLng(50, 16);
     var myOptions = {
         zoom: 8,
@@ -15,32 +12,32 @@ $(function(){
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     var map = new google.maps.Map(map_div.get(0), myOptions);
-    var markers = [];
+    var operaional_zoom = 7;
+    var cluster = new MarkerClusterer(map);
     var max_markers_count = 10;
-    var marker_threshold = max_markers_count * 3;
-    var fluster = new Fluster2(map);
 
-    function checkMarker(coord) {
-        for (var i = 0; i < fluster.markers.length; ++i) {
-            var val = fluster.markers[i];
-            if (coord.lat == val.position.lat() &&
-                    coord.lng == val.position.lng()) {
+    function checkMarkerExists(coord) {
+        var markers = cluster.getMarkers();
+        for (var i = 0; i < markers.length; ++i) {
+            var marker = markers[i];
+            if (coord.lat == marker.position.lat() &&
+                    coord.lng == marker.position.lng()) {
                 return true;
             }
-        };
+        }
         return false;
     }
 
     function clearMarkers(bbox) {
-        for (var i = 0; i < fluster.markers.length; ++i) {
-            var val = fluster.markers[i];
+        markers = cluster.getMarkers();
+        var markers_to_remove = [];
+        for (var i = 0; i < markers.length; ++i) {
+            var val = markers[i];
             if (!bbox.contains(val.position)) {
-                fluster.markers[i].setMap(null);
-                fluster.markers[i] = null;
-                fluster.markers.splice(i,1);
-                i--;
+                markers_to_remove.push(val);
             }
         }
+        cluster.removeMarkers(markers_to_remove);
     }
 
     google.maps.event.addListener(map, 'idle', function(event){
@@ -62,47 +59,35 @@ $(function(){
 
         clearMarkers(bounds);
 
-        // DEBUG
-        debug.html("Count: " + fluster.markers.length);
-        // END DEBUG
-
-        $.ajax({
-            type: "POST",
-            url: "walls/bbox.json/",
-            data: json,
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function(data){
-//                if (markers.length > marker_threshold) {
-//                    $.each(markers, function(key, val){
-//                        val[0].setMap(null);
-//                        val[0] = null;
-//                        val[1] = null;
-//                    });
-//                    markers = [];
-//                }
-                
-                $.each(data, function(key, value){
-                    if (!checkMarker(value)) {
-                        var p = new google.maps.LatLng(value.lat, value.lng);
-                        var m = new google.maps.Marker({
-    //                        map: map,
-                            title: value.title,
-                            position: p,
-                            draggable: false
-                        });
-                        var i = new google.maps.InfoWindow({
-                            content: value.info
-                        });
-                        google.maps.event.addListener(m, 'click', function(event){
-                            i.open(map, m);
-                        });
-                        fluster.addMarker(m);
-//                        markers.push([m, i]);
-                    }
-                });
-            }
-        });
+        if (map.zoom >= operaional_zoom) {
+            $.ajax({
+                type: "POST",
+                url: "walls/bbox.json/",
+                data: json,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    var markers = []
+                    $.each(data, function(key, value) {
+                        if (!checkMarkerExists(value)) {
+                            var p = new google.maps.LatLng(value.lat, value.lng);
+                            var m = new google.maps.Marker({
+                                title: value.title,
+                                position: p,
+                                draggable: false
+                            });
+                            var i = new google.maps.InfoWindow({
+                                content: value.info
+                            });
+                            google.maps.event.addListener(m, 'click', function(event) {
+                                i.open(map, m);
+                            });
+                            markers.push(m);
+                        }
+                    });
+                    cluster.addMarkers(markers);
+                }
+            });
+        }
     });
-    fluster.initialize();
-}); 
+});
