@@ -114,8 +114,13 @@ $(function(){
                                 position: p,
                                 draggable: false
                             });
+                            var content = value.info +
+                                    '<br/>' +
+                                    '<a href="' + value.url + '">'
+                                        + value.link_title +
+                                    '</a>';
                             var i = new google.maps.InfoWindow({
-                                content: value.info
+                                content: content
                             });
                             google.maps.event.addListener(m, 'click', function(event) {
                                 i.open(map, m);

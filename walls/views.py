@@ -213,6 +213,8 @@ def bbox(request):
                 'lng': wall.location.y,
                 'title': unicode(wall),
                 'info': wall.description,
+                'url': wall.get_absolute_url(),
+                'link_title': _('Details')
             } for wall in walls]
 
             return HttpResponse(simplejson.dumps(markers),
