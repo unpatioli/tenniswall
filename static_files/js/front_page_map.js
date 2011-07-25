@@ -1,17 +1,55 @@
 $(function(){
+    var initial_location;
+    var browserSupportFlag = new Boolean();
+    var newyork = new google.maps.LatLng(60, 105);
+    var siberia = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
+
+    function geolocate() {
+        // Try W3C Geolocation
+        if (navigator.geolocation) {
+            browserSupportFlag = true;
+            navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        initial_location = new google.maps.LatLng(
+                                position.coords.latitude,
+                                position.coords.longitude
+                        );
+                        map.setCenter(initial_location);
+                    },
+                    function () {
+                        handleNoGeoLocation(browserSupportFlag);
+                    }
+            );
+        } else {
+            browserSupportFlag = false;
+            handleNoGeoLocation(browserSupportFlag);
+        }
+    }
+
+    function handleNoGeoLocation(errorFlag) {
+        if (errorFlag) {
+            alert("Geolocation service failed.");
+            initial_location = newyork;
+        } else {
+            alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
+            initial_location = siberia;
+        }
+        map.setCenter(initial_location);
+    }
+
     var map_id = "main_map";
     var map_div = $('<div></div>').attr({
         id: map_id
     });
     $("#content").append(map_div);
 
-    var latlng = new google.maps.LatLng(50, 16);
     var myOptions = {
         zoom: 8,
-        center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     var map = new google.maps.Map(map_div.get(0), myOptions);
+    geolocate();
+
     var operaional_zoom = 7;
     var cluster = new MarkerClusterer(map);
     var max_markers_count = 10;
