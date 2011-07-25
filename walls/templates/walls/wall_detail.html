@@ -40,6 +40,10 @@
     <div id="wall_location" class="span-14 last">
       <h3>{% trans 'Location' %}</h3>
       {% map_view wall '10' '500px' '500px' %}
+      <h5>
+        <span>{% trans 'I am lost!' %}</span>&nbsp;
+        <span id='locate_marker_control'>{% trans 'locate wall' %}</span>
+      </h5>
     </div>
   </div>
 

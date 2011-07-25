@@ -26,9 +26,23 @@ $(function() {
     });
 
     google.maps.event.addListener(marker, 'click', function(event){
-        map.setCenter(event.latLng);
-        map.setZoom(%(zoom)s);
+        resetMap();
     });
+
+    var loc = $("#locate_marker_control");
+    if (loc) {
+        var loc_html = loc.html();
+        loc.html('<a href="" id="locate_marker_control_href">' + loc_html + '</a>');
+        $("#locate_marker_control_href").click(function(event) {
+            resetMap();
+            return false;
+        });
+    }
+
+    function resetMap() {
+        map.setCenter(latlng);
+        map.setZoom(%(zoom)s);
+    }
 });
 </script>
 
