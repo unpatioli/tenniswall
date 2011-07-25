@@ -27,23 +27,30 @@ class GoogleMapPickLocationWidget(Widget):
         """
 
         # Read geometry data from field
+        location = False
         try:
-            location = GEOSGeometry(value)
+            geometry = GEOSGeometry(value)
+            location = {
+                'lat': geometry.x,
+                'lon': geometry.y
+            }
         except Exception:
-            # todo: geolocate user
-            location = Point(-34.397, 150.644)
+            pass
 
         # map div's id
         field_id = attrs.get('id')
         map_id = "%s_map_layer" % field_id
 
         # Set Google map's tag_attributes
+        if location:
+            location_js = location
+        else:
+            location_js = 'geolocate'
         gmap_options = {
             'zoom': float(attrs.pop('zoom', 8)),
             'field_id': str(field_id),
             'map_id': str(map_id),
-            'lat': location.x,
-            'lon': location.y,
+            'location': location_js
         }
 
         # Javascript to create GMap
@@ -67,10 +74,14 @@ class GoogleMapPickLocationWidget(Widget):
 #</div>
 #        """
 
+        if location:
+            val = location.wkt
+        else:
+            val = ''
         input = u'<input id="%(id)s" type="hidden" name="%(name)s" value="%(value)s" />' % {
             'id': field_id,
             'name': name,
-            'value': location.wkt,
+            'value': val,
         }
 
         # Combine javascript with div tag with input tag
