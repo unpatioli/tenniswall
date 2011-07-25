@@ -1,14 +1,15 @@
 $(function(){
     var initial_location;
     var browserSupportFlag = new Boolean();
-    var newyork = new google.maps.LatLng(60, 105);
-    var siberia = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
+    var siberia = new google.maps.LatLng(60, 105);
+    var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
 
     function geolocate() {
         // Try W3C Geolocation
         if (navigator.geolocation) {
             browserSupportFlag = true;
             navigator.geolocation.getCurrentPosition(
+                    // success
                     function(position) {
                         initial_location = new google.maps.LatLng(
                                 position.coords.latitude,
@@ -16,10 +17,26 @@ $(function(){
                         );
                         map.setCenter(initial_location);
                     },
+                    
+                    // error
                     function () {
                         handleNoGeoLocation(browserSupportFlag);
-                    }
+                    },
+
+                    // options
+                    { timeout: 2000 }
             );
+        // Try Google Gears Geolocation
+        } else if (google.gears) {
+            browserSupportFlag = true;
+            var geo = google.gears.factory.create('beta.geolocation');
+            geo.getCurrentPosition(function(position) {
+              initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
+              map.setCenter(initialLocation);
+            }, function() {
+              handleNoGeoLocation(browserSupportFlag);
+            });
+        // Browser doesn't support geolocation
         } else {
             browserSupportFlag = false;
             handleNoGeoLocation(browserSupportFlag);
@@ -28,10 +45,10 @@ $(function(){
 
     function handleNoGeoLocation(errorFlag) {
         if (errorFlag) {
-            alert("Geolocation service failed.");
+            // Geolocation service failed
             initial_location = newyork;
         } else {
-            alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
+            // Browser doesn't support geolocation
             initial_location = siberia;
         }
         map.setCenter(initial_location);
