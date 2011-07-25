@@ -3,14 +3,15 @@ $(function () {
     ///// Geolocation Start
     var initial_location;
     var browserSupportFlag = new Boolean();
-    var newyork = new google.maps.LatLng(60, 105);
-    var siberia = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
+    var siberia = new google.maps.LatLng(60, 105);
+    var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
 
     function geolocate(map) {
         // Try W3C Geolocation
         if (navigator.geolocation) {
             browserSupportFlag = true;
             navigator.geolocation.getCurrentPosition(
+                    // success
                     function(position) {
                         initial_location = new google.maps.LatLng(
                                 position.coords.latitude,
@@ -18,9 +19,14 @@ $(function () {
                         );
                         initMap(initial_location);
                     },
+
+                    // error
                     function () {
                         handleNoGeoLocation(browserSupportFlag, map);
-                    }
+                    },
+
+                    // options
+                    { timeout: 2000 }
             );
         } else {
             browserSupportFlag = false;
@@ -30,10 +36,10 @@ $(function () {
 
     function handleNoGeoLocation(errorFlag, map) {
         if (errorFlag) {
-            alert("Geolocation service failed.");
+            // Geolocation service failed
             initial_location = newyork;
         } else {
-            alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
+            // Browser doesn't support geolocation
             initial_location = siberia;
         }
         initMap(initial_location);
