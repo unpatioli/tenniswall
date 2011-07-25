@@ -68,14 +68,8 @@ class GoogleMapPickLocationWidget(Widget):
 <div %s></div>
 """ % flatatt(tag_attributes)
 
-#        dialog = u"""
-#<div id='dialog' title='Confirmation'>
-#    <p>Delete marker?</p>
-#</div>
-#        """
-
         if location:
-            val = location.wkt
+            val = geometry.wkt
         else:
             val = ''
         input = u'<input id="%(id)s" type="hidden" name="%(name)s" value="%(value)s" />' % {
