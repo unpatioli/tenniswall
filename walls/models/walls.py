@@ -51,9 +51,9 @@ class Wall(Timestamps, Paranoid, Location, Ban):
         ordering = ['-created_at']
 
     # Managers
-    objects = DisplayManager()
-    free = FreeManager()
-    paid = PaidManager()
+    objects = DisplayManager(only_approved=True)
+    free = FreeManager(only_approved=True)
+    paid = PaidManager(only_approved=True)
 
     # Utility methods
     def __unicode__(self):
