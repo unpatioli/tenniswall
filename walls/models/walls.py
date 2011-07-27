@@ -8,7 +8,7 @@ from util import Timestamps, Paranoid, Ban
 from geo import Location
 
 class DisplayManager(Location.objects.__class__):
-    def __init__(self, only_approved=False):
+    def __init__(self, only_approved=True):
         super(DisplayManager, self).__init__()
         self.only_approved = only_approved
 
@@ -51,9 +51,10 @@ class Wall(Timestamps, Paranoid, Location, Ban):
         ordering = ['-created_at']
 
     # Managers
-    objects = DisplayManager(only_approved=True)
-    free = FreeManager(only_approved=True)
-    paid = PaidManager(only_approved=True)
+    all_walls = DisplayManager(only_approved=False)
+    objects = DisplayManager()
+    free = FreeManager()
+    paid = PaidManager()
 
     # Utility methods
     def __unicode__(self):
@@ -65,6 +66,9 @@ class Wall(Timestamps, Paranoid, Location, Ban):
     # Custom methods
     def is_paid(self):
         return self.price > 0
+    is_paid.short_description = 'Paid'
+    is_paid.boolean = True
+    is_paid.admin_order_field = 'price'
 
     def can_edit(self, user):
         return self.reported_by == user
