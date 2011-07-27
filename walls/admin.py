@@ -6,12 +6,17 @@ from walls import models
 
 class WallAdminForm(forms.ModelForm):
     is_approved = forms.BooleanField(required=False)
+    is_banned = forms.BooleanField(required=False)
     
     def __init__(self, *args, **kwargs):
         super(WallAdminForm, self).__init__(*args, **kwargs)
         self.fields['is_approved'] = forms.BooleanField(
             required=False,
             initial=self.instance.is_approved()
+        )
+        self.fields['is_banned'] = forms.BooleanField(
+            required=False,
+            initial=self.instance.is_banned()
         )
 
     class Meta:
@@ -29,10 +34,24 @@ class WallAdminForm(forms.ModelForm):
         else:
             self.instance.approved_at = None
 
+    def clean_is_banned(self):
+        is_banned = self.cleaned_data['is_banned']
+        if is_banned:
+            if not self.instance.banned_at:
+                self.instance.banned_at = datetime.now()
+        else:
+            self.instance.banned_at = None
+
     def clean(self):
         cleaned_data = super(WallAdminForm, self).clean()
-        if 'is_approved' in cleaned_data:
-            del cleaned_data['is_approved']
+        res = self._remove(['is_approved', 'is_banned'], cleaned_data)
+        return res
+
+    def _remove(self, fields, cleaned_data):
+        cleaned_data = cleaned_data.copy()
+        for field in fields:
+            if field in cleaned_data:
+                del cleaned_data[field]
         return cleaned_data
 
 class WallAdmin(admin.ModelAdmin):
