@@ -8,15 +8,17 @@ from util import Timestamps, Paranoid, Ban
 from geo import Location
 
 class DisplayManager(Location.objects.__class__):
-    def __init__(self, only_approved=True):
+    def __init__(self, exclude_banned=True, only_approved=True):
         super(DisplayManager, self).__init__()
+        self.exclude_banned = exclude_banned
         self.only_approved = only_approved
 
     def get_query_set(self):
         query_set = super(DisplayManager, self).get_query_set().filter(
             deleted_at=None,
-            banned_at=None
         )
+        if self.exclude_banned:
+            query_set = query_set.filter(banned_at=None)
         if self.only_approved:
             query_set = query_set.filter(approved_at__lte=datetime.now())
         return query_set
@@ -51,7 +53,7 @@ class Wall(Timestamps, Paranoid, Location, Ban):
         ordering = ['-created_at']
 
     # Managers
-    all_walls = DisplayManager(only_approved=False)
+    all_walls = DisplayManager(exclude_banned=False, only_approved=False)
     objects = DisplayManager()
     free = FreeManager()
     paid = PaidManager()
