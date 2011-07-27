@@ -43,7 +43,8 @@ class WallAdmin(admin.ModelAdmin):
                     'is_deleted')
     search_fields = ('address', 'description',)
     actions = ['make_approved', 'make_unapproved',
-               'make_banned', 'make_unbanned',]
+               'make_banned', 'make_unbanned',
+               'mark_deleted', 'restore']
 
     class Media:
         js = (
@@ -102,6 +103,29 @@ class WallAdmin(admin.ModelAdmin):
             'successfully unbanned.'
         )
 
+    def mark_deleted(self, request, queryset):
+        qs = queryset.filter(deleted_at=None)
+        walls_deleted = 0
+        for wall in qs:
+            wall.delete()
+            walls_deleted += 1
+        self._message(
+            request,
+            walls_deleted,
+            'successfully marked deleted.'
+        )
+    
+    def restore(self, request, queryset):
+        qs = queryset.exclude(deleted_at=None)
+        walls_restored = 0
+        for wall in qs:
+            wall.restore()
+            walls_restored += 1
+        self._message(
+            request,
+            walls_restored,
+            'successfully restored.'
+        )
 
 admin.site.register(models.Wall, WallAdmin)
 admin.site.register(models.WallComment)

@@ -24,6 +24,10 @@ class Paranoid(models.Model):
         self.deleted_at = datetime.now()
         self.save()
 
+    def restore(self):
+        self.deleted_at = None
+        self.save()
+
     # Custom methods
     def is_deleted(self):
         return self.deleted_at is not None
