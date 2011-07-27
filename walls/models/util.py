@@ -24,6 +24,13 @@ class Paranoid(models.Model):
         self.deleted_at = datetime.now()
         self.save()
 
+    # Custom methods
+    def is_deleted(self):
+        return self.deleted_at is not None
+    is_deleted.short_description = 'Deleted'
+    is_deleted.boolean = True
+    is_deleted.admin_order_field = 'deleted_at'
+
 class Ban(models.Model):
     approved_at = models.DateTimeField(null=True, blank=True,
                                        editable=False, db_index=True)
@@ -32,3 +39,16 @@ class Ban(models.Model):
 
     class Meta:
         abstract = True
+
+    # Custom methods
+    def is_approved(self):
+        return self.approved_at is not None
+    is_approved.short_description = 'Approved'
+    is_approved.boolean = True
+    is_approved.admin_order_field = 'approved_at'
+
+    def is_banned(self):
+        return self.banned_at is not None
+    is_banned.short_description = 'Banned'
+    is_banned.boolean = True
+    is_banned.admin_order_field = 'banned_at'
