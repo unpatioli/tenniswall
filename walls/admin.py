@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib import admin
 from django import forms
 from mapper.widgets import GoogleMapPickLocationWidget
@@ -21,7 +22,6 @@ class WallAdminForm(forms.ModelForm):
         }
 
     def clean_is_approved(self):
-        from datetime import datetime
         is_approved = self.cleaned_data['is_approved']
         if is_approved:
             if not self.instance.approved_at:
@@ -42,7 +42,8 @@ class WallAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'is_paid', 'is_approved', 'is_banned',
                     'is_deleted')
     search_fields = ('address', 'description',)
-    actions = ['make_approved', 'make_unapproved']
+    actions = ['make_approved', 'make_unapproved',
+               'make_banned', 'make_unbanned',]
 
     class Media:
         js = (
@@ -66,8 +67,6 @@ class WallAdmin(admin.ModelAdmin):
         )
 
     def make_approved(self, request, queryset):
-        from datetime import datetime
-
         qs = queryset.filter(approved_at=None)
         rows_updated = qs.update(approved_at=datetime.now())
         self._message(
@@ -83,6 +82,24 @@ class WallAdmin(admin.ModelAdmin):
             request,
             rows_updated,
             'successfully marked as unapproved.'
+        )
+
+    def make_banned(self, request, queryset):
+        qs = queryset.filter(banned_at=None)
+        rows_updated = qs.update(banned_at=datetime.now())
+        self._message(
+            request,
+            rows_updated,
+            'successfully banned.'
+        )
+
+    def make_unbanned(self, request, queryset):
+        qs = queryset.exclude(banned_at=None)
+        rows_updated = qs.update(banned_at=None)
+        self._message(
+            request,
+            rows_updated,
+            'successfully unbanned.'
         )
 
 
