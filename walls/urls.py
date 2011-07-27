@@ -1,9 +1,7 @@
 from django.conf.urls.defaults import patterns, url
 from django.contrib.auth.decorators import login_required
-from django.views.generic import  ListView
-from walls.models import Wall
 from walls.views import AddWallView, IndexView, EditWallView,\
-    CommentedWallDetailView, DeleteWallView
+    CommentedWallDetailView, DeleteWallView, FreeListView, PaidListView
 
 urlpatterns = patterns('',
     url(r'^$',
@@ -11,15 +9,11 @@ urlpatterns = patterns('',
         name='walls_index'
     ),
     url(r'free/$',
-        ListView.as_view(
-            queryset=Wall.free.all()
-        ),
+        FreeListView.as_view(),
         name='walls_free'
     ),
     url(r'paid/$',
-        ListView.as_view(
-            queryset=Wall.paid.all()
-        ),
+        PaidListView.as_view(),
         name='walls_paid'
     ),
 

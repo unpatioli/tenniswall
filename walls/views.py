@@ -4,7 +4,7 @@ from django.contrib.gis.geos import Polygon
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.views.generic import CreateView, TemplateView, UpdateView, DeleteView
+from django.views.generic import CreateView, TemplateView, UpdateView, DeleteView, ListView
 from django.utils.translation import ugettext as _
 from django.views.generic.detail import   DetailView
 from walls.forms import WallForm, WallCommentForm
@@ -22,14 +22,17 @@ class IndexView(TemplateView):
         return context
 
 
+class FreeListView(ListView):
+    def get_queryset(self):
+        return Wall.free.all()
+
+class PaidListView(ListView):
+    def get_queryset(self):
+        return Wall.paid.all()
+
 class AddWallView(CreateView):
     model = Wall
     form_class = WallForm
-
-    #    def get_initial(self):
-    #        initials = super(AddWallView, self).get_initial()
-    #        initials.update({'reported_by': self.request.user})
-    #        return initials
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -44,8 +47,10 @@ class AddWallView(CreateView):
 
 
 class EditWallView(UpdateView):
-    model = Wall
     form_class = WallForm
+
+    def get_queryset(self):
+        return Wall.objects.all()
 
     def get_object(self, queryset=None):
         wall = super(EditWallView, self).get_object(queryset)
@@ -63,7 +68,8 @@ class EditWallView(UpdateView):
 
 
 class DeleteWallView(DeleteView):
-    model = Wall
+    def get_queryset(self):
+        return Wall.objects.all()
 
     def get_object(self, queryset=None):
         wall = super(DeleteWallView, self).get_object(queryset)
@@ -153,10 +159,12 @@ class CommentedDetailView(DetailView):
 
 
 class CommentedWallDetailView(CommentedDetailView):
-    model = Wall
     comment_model = WallComment
     comment_form_class = WallCommentForm
     comment_target_field_name = 'wall'
+
+    def get_queryset(self):
+        return Wall.objects.all()
 
     def get_success_url(self):
         return reverse('walls_detail', args=[self.object.pk, ])
