@@ -71,6 +71,11 @@ class WallAdmin(admin.ModelAdmin):
             "http://maps.google.com/maps/api/js?sensor=false",
         )
 
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.reported_by = request.user
+        super(WallAdmin, self).save_model(request, obj, form, change)
+
     ##################
     # Custom actions #
     ##################
