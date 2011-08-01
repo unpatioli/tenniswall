@@ -63,6 +63,12 @@ class Wall(Timestamps, Paranoid, Location, Ban):
     objects = DisplayManager()
     free = FreeManager()
     paid = PaidManager()
+    all_free = FreeManager(exclude_deleted=False,
+                           exclude_banned=False,
+                           only_approved=False)
+    all_paid = PaidManager(exclude_deleted=False,
+                           exclude_banned=False,
+                           only_approved=False)
 
     # Utility methods
     def __unicode__(self):
