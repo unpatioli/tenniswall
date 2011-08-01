@@ -1,4 +1,5 @@
 from django import template
+import settings
 
 register = template.Library()
 
@@ -55,5 +56,37 @@ $(function() {
         'zoom': float(zoom),
         'width': width,
         'height': height,
+    }
+    return tag
+
+@register.simple_tag
+def list_on_map(markers_url, method='POST', data_type='json',
+                content_type='application/json; charset=utf-8',
+                zoom=8, operational_zoom=7, max_markers_count=10,
+                width='', height='500px'):
+    tag = """
+<script type="text/javascript">
+    var markers_url = "%(markers_url)s";
+    var method = "%(method)s";
+    var data_type = "%(data_type)s";
+    var content_type = "%(content_type)s";
+    var zoom = %(zoom)s;
+    var operational_zoom = %(operational_zoom)s;
+    var max_markers_count = %(max_markers_count)i;
+    var map_width = "%(width)s";
+    var map_height = "%(height)s";
+</script>
+<script type="text/javascript" src="%(STATIC_URL)sjs/mapper/list_on_map.js"></script>
+    """ % {
+        'method': method,
+        'markers_url': markers_url,
+        'data_type': data_type,
+        'content_type': content_type,
+        'zoom': zoom,
+        'operational_zoom': operational_zoom,
+        'max_markers_count': max_markers_count,
+        'width': width,
+        'height': height,
+        'STATIC_URL': settings.STATIC_URL,
     }
     return tag
