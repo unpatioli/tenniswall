@@ -1,5 +1,5 @@
 {% extends 'welcome/base.html' %}
-{% load i18n %}
+{% load i18n map_view %}
 
 {% block head %}
   {{ block.super }}
@@ -9,10 +9,8 @@
   {% include '_markercluster_api.html' %}
   {% include '_json_ajax.html' %}
 
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/main_map.css" type="text/css" media="screen">
-
-  <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/front_page_map.js"></script>
-
+  {% url walls_bbox as bbox_url %}
+  {% list_on_map bbox_url "['free', 'paid']" %}
 {% endblock %}
 
 {% block content %}
