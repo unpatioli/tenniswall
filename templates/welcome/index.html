@@ -2,19 +2,16 @@
 {% load i18n %}
 
 {% block head %}
+  {{ block.super }}
+
   {% include '_google_maps_api.html' %}
+  {% include '_gears_api.html' %}
+  {% include '_markercluster_api.html' %}
+  {% include '_json_ajax.html' %}
 
   <link rel="stylesheet" href="{{ STATIC_URL }}css/main_map.css" type="text/css" media="screen">
 
-  <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/csrf_ajax.js"></script>
-  <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/jquery.json-2.2.min.js"></script>
   <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/front_page_map.js"></script>
-
-  <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/markerclusterer_packed.js"></script>
-
-
-  <script type="text/javascript" language="javascript" src="http://code.google.com/apis/gears/gears_init.js"></script>
-
 
 {% endblock %}
 
