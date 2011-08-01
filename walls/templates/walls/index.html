@@ -1,5 +1,16 @@
 {% extends 'walls/base.html' %}
-{% load i18n %}
+{% load i18n map_view %}
+
+{% block head %}
+  {{ block.super }}
+
+  {% include '_gears_api.html' %}
+  {% include '_markercluster_api.html' %}
+  {% include '_json_ajax.html' %}
+
+  {% url walls_bbox as bbox_url %}
+  {% list_on_map bbox_url %}
+{% endblock %}
 
 {% block content %}
   <h1>{% trans 'Walls' %}</h1>
