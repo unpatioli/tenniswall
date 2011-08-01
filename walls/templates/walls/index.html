@@ -9,7 +9,7 @@
   {% include '_json_ajax.html' %}
 
   {% url walls_bbox as bbox_url %}
-  {% list_on_map bbox_url %}
+  {% list_on_map bbox_url "['free', 'paid']" %}
 {% endblock %}
 
 {% block content %}
