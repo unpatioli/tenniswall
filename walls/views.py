@@ -215,13 +215,21 @@ def bbox(request):
             except ValueError:
                 num = 2
 
-            wall_type = json_data.get('type', 'free')
-            if wall_type == 'free':
-                qs = Wall.free
-            elif wall_type == 'paid':
-                qs = Wall.paid
+            wall_type = json_data.get('wall_type')
+            if (wall_type and
+                not (isinstance(wall_type, (list, tuple))
+                    or getattr(wall_type,'__iter__',False))):
+                wall_type = [wall_type]
+            
+            qs = Wall.objects.none()
+
+            if not wall_type:
+                qs = Wall.objects.all()
             else:
-                qs = Wall.objects
+                if 'free' in wall_type:
+                    qs |= Wall.free.all()
+                if 'paid' in wall_type:
+                    qs |= Wall.paid.all()
 
             # Get walls in bbox
             walls = qs.filter(location__contained = bbox_polygon)[:num]
@@ -231,6 +239,7 @@ def bbox(request):
                 'lat': wall.location.x,
                 'lng': wall.location.y,
                 'title': unicode(wall),
+                'is_paid': wall.is_paid(),
                 'info': wall.description,
                 'url': wall.get_absolute_url(),
                 'link_title': _('Details')
