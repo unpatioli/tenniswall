@@ -112,7 +112,7 @@ $(function() {
                 lng: sw.lng()
             },
             num: max_markers_count,
-            type: 'free'
+            wall_type: wall_type
         });
 
         clearMarkers(bounds);
@@ -129,8 +129,15 @@ $(function() {
                     $.each(data, function(key, value) {
                         if (!checkMarkerExists(value)) {
                             var p = new google.maps.LatLng(value.lat, value.lng);
+                            if (value.is_paid) {
+                                var img = new google.maps.MarkerImage(static_url + 'img/icons/map/tennis.png');
+                            } else {
+                                var img = new google.maps.MarkerImage(static_url + 'img/icons/map/tennis2.png');
+                            }
                             var m = new google.maps.Marker({
                                 title: value.title,
+                                flat: true,
+                                icon: img,
                                 position: p,
                                 draggable: false
                             });
