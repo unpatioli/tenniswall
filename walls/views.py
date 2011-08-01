@@ -24,11 +24,13 @@ class IndexView(TemplateView):
 
 class FreeListView(ListView):
     def get_queryset(self):
-        return Wall.free.all()
+        return Wall.free.all() |\
+               Wall.all_free.filter(reported_by=self.request.user)
 
 class PaidListView(ListView):
     def get_queryset(self):
-        return Wall.paid.all()
+        return Wall.paid.all() |\
+               Wall.all_paid.filter(reported_by=self.request.user)
 
 class AddWallView(CreateView):
     model = Wall
@@ -50,7 +52,8 @@ class EditWallView(UpdateView):
     form_class = WallForm
 
     def get_queryset(self):
-        return Wall.objects.all()
+        return Wall.objects.all() |\
+               Wall.all_walls.filter(reported_by=self.request.user)
 
     def get_object(self, queryset=None):
         wall = super(EditWallView, self).get_object(queryset)
@@ -69,7 +72,8 @@ class EditWallView(UpdateView):
 
 class DeleteWallView(DeleteView):
     def get_queryset(self):
-        return Wall.objects.all()
+        return Wall.objects.all() |\
+               Wall.all_walls.filter(reported_by=self.request.user)
 
     def get_object(self, queryset=None):
         wall = super(DeleteWallView, self).get_object(queryset)
@@ -164,7 +168,8 @@ class CommentedWallDetailView(CommentedDetailView):
     comment_target_field_name = 'wall'
 
     def get_queryset(self):
-        return Wall.objects.all()
+        return Wall.objects.all() |\
+               Wall.all_walls.filter(reported_by=self.request.user)
 
     def get_success_url(self):
         return reverse('walls_detail', args=[self.object.pk, ])
@@ -210,10 +215,16 @@ def bbox(request):
             except ValueError:
                 num = 2
 
+            wall_type = json_data.get('type', 'free')
+            if wall_type == 'free':
+                qs = Wall.free
+            elif wall_type == 'paid':
+                qs = Wall.paid
+            else:
+                qs = Wall.objects
+
             # Get walls in bbox
-            walls = Wall.objects.filter(
-                location__contained = bbox_polygon
-            )[:num]
+            walls = qs.filter(location__contained = bbox_polygon)[:num]
 
             # Assemble walls list
             markers = [{
