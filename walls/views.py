@@ -223,13 +223,10 @@ def bbox(request):
             
             qs = Wall.objects.none()
 
-            if not wall_type:
-                qs = Wall.objects.all()
-            else:
-                if 'free' in wall_type:
-                    qs |= Wall.free.all()
-                if 'paid' in wall_type:
-                    qs |= Wall.paid.all()
+            if 'free' in wall_type:
+                qs |= Wall.free.all()
+            if 'paid' in wall_type:
+                qs |= Wall.paid.all()
 
             # Get walls in bbox
             walls = qs.filter(location__contained = bbox_polygon)[:num]
