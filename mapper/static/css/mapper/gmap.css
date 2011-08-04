@@ -7,3 +7,15 @@ div#id_location_map_layer {
     max-width: 100%;
     height: 500px;
 }
+
+#wall_types_select_bar {
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+}
+#wall_types_select_bar .ui-widget {
+    padding: 0.4em;
+    font-size: 1.2em !important;
+}
+#wall_types_select_bar .toggle {
+    cursor: pointer;
+}
