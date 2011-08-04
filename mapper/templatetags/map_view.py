@@ -86,7 +86,10 @@ def list_on_map(markers_url, wall_type, method='POST', data_type='json',
 
     var static_url = "%(STATIC_URL)s";
 </script>
+<script type="text/javascript" src="%(STATIC_URL)sjs/mapper/map_utils.js"></script>
 <script type="text/javascript" src="%(STATIC_URL)sjs/mapper/list_on_map.js"></script>
+<link rel="stylesheet" href="%(STATIC_URL)scss/mapper/gmap.css" type="text/css" media="screen, projection">
+
     """ % {
         'wall_type': wall_type,
         'markers_url': markers_url,
