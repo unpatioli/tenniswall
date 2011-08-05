@@ -55,15 +55,34 @@
                 <a href="{% url accounts_logout %}">{% trans 'Logout' %}</a>
               </div>
             {% else %}
-              <form action="{% url accounts_login %}" method="post">
-                {% csrf_token %}
-                <input type="text" name="username" />
-                <input type="password" name="password" />
-                <input type="hidden" name="next" value="{{ request.path }}" />
-                <input type="submit" value="{% trans 'Login' %}" />
-                &nbsp;
-                <a href="{% url accounts_register %}">{% trans 'Registration' %}</a>
-              </form>
+              <div id="auth_form" class="span-8 last">
+                <form action="{% url accounts_login %}" method="post">
+                  <div class="span-4">
+                    <div id="auth_form_left">
+                      <label for="auth_login">{% trans 'Login' %}</label>
+                      <input type="text" id="auth_login" name="username" />
+                    </div>
+                  </div>
+
+                  <div class="span-4 last">
+                    <div id="auth_form_right">
+                      <label for="auth_password">{% trans 'Password' %}</label>
+                      <input type="password" id="auth_password" name="password" />
+                    </div>
+                  </div>
+
+                  <div class="span-8 last">
+                    <div id="auth_form_controls">
+                      <input type="submit" value="{% trans 'Login' %}" />
+                      &nbsp;
+                      <a href="{% url accounts_register %}">{% trans 'Registration' %}</a>
+                    </div>
+                  </div>
+
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.path }}" />
+                </form>
+              </div>
             {% endif %}
           </div>
           {% if messages %}
