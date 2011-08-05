@@ -6,22 +6,3 @@
   
   {% include '_google_maps_api.html' %}
 {% endblock %}
-
-{% block header %}
-  <div id="top_submenu">
-    <ul class="menu horizontal">
-      <li>
-        {% link request walls_free %}{% trans 'Free' %}{% endlink %}
-      </li>
-      <li>
-        {% link request walls_paid %}{% trans 'Paid' %}{% endlink %}
-      </li>
-
-      {% if user.is_authenticated %}
-        <li>
-          {% link request walls_add %}{% trans 'Add wall' %}{% endlink %}
-        </li>
-      {% endif %}
-    </ul>
-  </div>
-{% endblock %}
