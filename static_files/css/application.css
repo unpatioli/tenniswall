@@ -42,9 +42,16 @@
     font-size: x-small;
     font-weight: normal;
 }
+#auth_form input[type=text],
+#auth_form input[type=password] {
+    width: 130px;
+}
+input[type=submit] {
+    padding: 3px;
+}
 #auth_form_left, #auth_form_controls {
     margin-left: 15px;
 }
 #auth_form_right {
-    margin-left: 15px;
+    margin-left: 5px;
 }
