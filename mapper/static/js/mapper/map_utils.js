@@ -10,6 +10,25 @@ function clearMarkers(bbox, cluster) {
     cluster.removeMarkers(markers_to_remove);
 }
 
+function clearMarkersByType(type, cluster) {
+    var markers = cluster.getMarkers();
+    var markers_to_remove = [];
+
+    $.each(markers, function(key, value) {
+        if (value.is_paid) {
+            if ($.inArray('paid', type) == -1) {
+                markers_to_remove.push(value);
+            }
+        } else {
+            if ($.inArray('free', type) == -1) {
+                markers_to_remove.push(value);
+            }
+        }
+    });
+
+    cluster.removeMarkers(markers_to_remove);
+}
+
 function checkMarkerExists(coord, cluster) {
     var markers = cluster.getMarkers();
     for (var i = 0; i < markers.length; ++i) {
@@ -25,7 +44,7 @@ function checkMarkerExists(coord, cluster) {
 function mapRedraw(map, wall_type, cluster, purge) {
     var bounds = map.getBounds();
     if (purge) {
-        cluster.clearMarkers();
+        clearMarkersByType(wall_type, cluster);
     } else {
         clearMarkers(bounds, cluster);
     }
@@ -69,7 +88,8 @@ function mapRedraw(map, wall_type, cluster, purge) {
                             flat: true,
                             icon: img,
                             position: p,
-                            draggable: false
+                            draggable: false,
+                            is_paid: value.is_paid
                         });
                         var content = value.info +
                                 '<br/>' +
