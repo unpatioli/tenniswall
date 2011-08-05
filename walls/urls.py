@@ -1,22 +1,9 @@
 from django.conf.urls.defaults import patterns, url
 from django.contrib.auth.decorators import login_required
-from walls.views import AddWallView, IndexView, EditWallView,\
-    CommentedWallDetailView, DeleteWallView, FreeListView, PaidListView
+from walls.views import AddWallView, EditWallView,\
+    CommentedWallDetailView, DeleteWallView
 
 urlpatterns = patterns('',
-    url(r'^$',
-        IndexView.as_view(),
-        name='walls_index'
-    ),
-    url(r'free/$',
-        FreeListView.as_view(),
-        name='walls_free'
-    ),
-    url(r'paid/$',
-        PaidListView.as_view(),
-        name='walls_paid'
-    ),
-
     url(r'^(?P<pk>\d+)/$',
         CommentedWallDetailView.as_view(),
         name='walls_detail'

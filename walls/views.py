@@ -10,28 +10,6 @@ from django.views.generic.detail import   DetailView
 from walls.forms import WallForm, WallCommentForm
 from walls.models import Wall, WallComment
 
-class IndexView(TemplateView):
-    template_name = 'walls/index.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
-        context.update({
-            'free_walls': Wall.free.all()[:10],
-            'paid_walls': Wall.paid.all()[:10],
-            })
-        return context
-
-
-class FreeListView(ListView):
-    def get_queryset(self):
-        return Wall.free.all() |\
-               Wall.all_free.filter(reported_by=self.request.user)
-
-class PaidListView(ListView):
-    def get_queryset(self):
-        return Wall.paid.all() |\
-               Wall.all_paid.filter(reported_by=self.request.user)
-
 class AddWallView(CreateView):
     model = Wall
     form_class = WallForm
