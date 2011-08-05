@@ -21,3 +21,13 @@
 {
     padding-bottom: 170px;
 }
+
+.logo {
+    padding-top: 10px;
+}
+.logo a {
+    text-decoration: none;
+
+    color: #8a1f11;
+    font-weight: bold;
+}
