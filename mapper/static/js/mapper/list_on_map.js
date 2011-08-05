@@ -95,14 +95,14 @@ $(function() {
             });
 
     function mapChangeRedraw() {
-        var wt = [];
+        wall_type = [];
         if ($("#wall_type_free").is(':checked')) {
-            wt.push('free');
+            wall_type.push('free');
         }
         if ($("#wall_type_paid").is(':checked')) {
-            wt.push('paid');
+            wall_type.push('paid');
         }
         
-        mapRedraw(map, wt, cluster, true);
+        mapRedraw(map, wall_type, cluster, true);
     }
 });
