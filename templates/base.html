@@ -20,6 +20,12 @@
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
   {% include 'inc/_jquery_ui.html' %}
 
+  <script type="text/javascript">
+    $(function() {
+      $(":submit").button();
+    });
+  </script>
+
   {% block head %}{% endblock %}
 </head>
 <body class="bp">
@@ -73,7 +79,7 @@
 
                   <div class="span-8 last">
                     <div id="auth_form_controls">
-                      <input type="submit" value="{% trans 'Login' %}" />
+                      <input type="submit" id="auth_login_submit" value="{% trans 'Login' %}" />
                       &nbsp;
                       <a href="{% url accounts_register %}">{% trans 'Registration' %}</a>
                     </div>
