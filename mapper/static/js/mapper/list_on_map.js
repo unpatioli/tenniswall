@@ -57,19 +57,19 @@ $(function() {
     // End geolocation
 
     $(
-    '<div id="wall_types_select_bar">' +
+    '<div id="wall_types_select_bar" class="span-24 last">' +
         '<input type="checkbox" checked="1" id="wall_type_free" class="toggle" />' +
         '<label for="wall_type_free" class="toggle">Free</label>' +
 
         '<input type="checkbox" checked="1" id="wall_type_paid" class="toggle" />' +
-        '<label for="wall_type_paid" class="toggle">Paid</label> ' +
-    '</div>'
+        '<label for="wall_type_paid" class="toggle">Paid</label> '
     ).appendTo("#content");
     $("#wall_types_select_bar").buttonset();
 
     var map_id = "main_map";
     var map_div = $('<div></div>').attr({
         id: map_id,
+        class: "span-24 last",
         style: "width:" + map_width + ";" +
                 "height:" + map_height
     });
