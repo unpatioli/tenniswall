@@ -1,7 +1,7 @@
 {% load i18n %}
 
 {% if user.is_authenticated %}
-  <form action="." method="post">
+  <form action="" method="post">
     {% csrf_token %}
 
     {% for field in comment_form %}
