@@ -11,8 +11,13 @@
 
   {% url walls_bbox as bbox_url %}
   {% list_on_map bbox_url "['free', 'paid']" %}
-{% endblock %}
 
-{% block content %}
-    <h1>{% trans 'Welcome' %}!</h1>
+  {% if user.is_authenticated %}
+    <script type="text/javascript">
+      $(function() {
+        $('<a href="{% url walls_add %}">{% trans "Add wall" %}</a>')
+          .appendTo("#wall_types_select_bar");
+      });
+    </script>
+  {% endif %}
 {% endblock %}

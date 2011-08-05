@@ -19,3 +19,8 @@ div#id_location_map_layer {
 #wall_types_select_bar .toggle {
     cursor: pointer;
 }
+
+#wall_types_select_bar a {
+    padding-left: 20px;
+    font-size: 12pt;
+}
