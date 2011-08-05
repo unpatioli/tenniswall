@@ -4,10 +4,10 @@
 {% block head %}
   {{ block.super }}
 
-  {% include '_google_maps_api.html' %}
-  {% include '_gears_api.html' %}
-  {% include '_markercluster_api.html' %}
-  {% include '_json_ajax.html' %}
+  {% include 'inc/_google_maps_api.html' %}
+  {% include 'inc/_gears_api.html' %}
+  {% include 'inc/_markercluster_api.html' %}
+  {% include 'inc/_json_ajax.html' %}
 
   {% url walls_bbox as bbox_url %}
   {% list_on_map bbox_url "['free', 'paid']" %}
