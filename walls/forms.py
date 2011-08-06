@@ -28,3 +28,8 @@ class WallCommentForm(forms.ModelForm):
         model = WallComment
 
         fields = ('comment',)
+        widgets = {
+            'comment': forms.Textarea({
+                'class': 'span-23'
+            })
+        }
