@@ -110,9 +110,11 @@ class CommentedDetailView(DetailView):
 
     def form_valid(self, form):
         self.form_save(form)
+        messages.success(self.request, _('Your comment is posted'))
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form):
+        messages.error(self.request, _('Your comment was not posted'))
         return self._render_with_form(form)
 
     def get(self, request, **kwargs):
