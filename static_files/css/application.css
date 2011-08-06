@@ -55,3 +55,36 @@ input[type=submit] {
 #auth_form_right {
     margin-left: 5px;
 }
+
+/* Form */
+.field {
+    padding-bottom: 20px;
+}
+.field .label label {
+    font-size: large;
+}
+.field .input input,
+.field .input select {
+    font-size: large;
+}
+
+.submit input[type=submit] {
+    font-size: large;
+}
+
+.field .input input {
+    height: 30px;
+    width: 400px;
+}
+
+.field .input input,
+.field textarea {
+    border-width: 2px;
+}
+
+.field .input_errors ul.errorlist,
+.field .input_errors_top ul.errorlist{
+    text-align: left;
+    padding-top: 10px;
+    font-size: large;
+}
