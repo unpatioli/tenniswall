@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from accounts.models import UserProfile
+from accounts.widgets import CalendarWidget
 
 class NewUserForm(UserCreationForm):
     email = forms.EmailField(label=_('Email'))
@@ -25,3 +26,7 @@ class NewUserForm(UserCreationForm):
 class UserprofileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
+
+        widgets = {
+            'birthday': CalendarWidget
+        }
