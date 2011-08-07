@@ -86,7 +86,6 @@ $(function () {
     }
 
     function setFieldVal(marker) {
-        $("#debug").html(markerToWkt(marker));
         $("#id_location").val(markerToWkt(marker));
     }
 
