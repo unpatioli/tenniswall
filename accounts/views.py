@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404
 from django.utils.functional import lazy
 from django.utils.translation import ugettext as _
@@ -29,9 +29,9 @@ class ThankyouView(TemplateView):
     template_name = 'accounts/thankyou.html'
 
     def get_context_data(self, **kwargs):
-        registered_user_name = self.request.session.get('registered_user_name', False)
-        if not registered_user_name:
-            raise Http404()
+        registered_user_name = self.request.session.get(
+            'registered_user_name', False
+        )
 
         try:
             del self.request.session['registered_user_name']
@@ -41,6 +41,12 @@ class ThankyouView(TemplateView):
         context = super(ThankyouView, self).get_context_data(**kwargs)
         context['registered_user_name'] = registered_user_name
         return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        if context.get('registered_user_name', False):
+            return self.render_to_response(context)
+        return redirect('root')
 
 class ProfileView(DetailView):
     model = UserProfile
