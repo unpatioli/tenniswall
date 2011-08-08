@@ -32,7 +32,7 @@
     font-weight: bold;
 }
 
-#auth_form {
+#auth_form, #account_info_panel {
     background: #c3d9ff;
     padding: 5px 0 10px 0;
 }
@@ -54,6 +54,10 @@ input[type=submit] {
 }
 #auth_form_right {
     margin-left: 5px;
+}
+
+#account_info_panel #username {
+    padding-left: 25px;
 }
 
 /* Form */

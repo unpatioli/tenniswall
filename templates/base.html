@@ -3,21 +3,23 @@
 
 {% block auth_panel %}
   {% if user.is_authenticated %}
-    <div id="user" class="prepend-3 span-3">
-      <div id="username" class="span-3 last">
-        {% with user.get_profile as profile %}
-          {% if profile %}
-            <a href="{{ profile.get_absolute_url }}">
+    <div id="account_info_panel" class="push-3 span-5 last">
+      <div id="user" class="left span-3">
+        <div id="username">
+          {% with user.get_profile as profile %}
+            {% if profile %}
+              <a href="{{ profile.get_absolute_url }}">
+                {{ user.username }}
+              </a>
+            {% else %}
               {{ user.username }}
-            </a>
-          {% else %}
-            {{ user.username }}
-          {% endif %}
-        {% endwith %}
+            {% endif %}
+          {% endwith %}
+        </div>
       </div>
-    </div>
-    <div class="span-2 last">
-      <a href="{% url accounts_logout %}">{% trans 'Logout' %}</a>
+      <div class="span-2 right last">
+        <a href="{% url accounts_logout %}">{% trans 'Logout' %}</a>
+      </div>
     </div>
   {% else %}
     <div id="auth_form" class="span-8 last">
