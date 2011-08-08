@@ -18,12 +18,12 @@
       </ul>
     </div>
     <div id="wall_info" class="span-10">
-      <div>
-        <h3>{% trans 'Address' %}</h3>
+      <div class="object_field">
+        <div class="object_field_title">{% trans 'Address' %}</div>
         {{ object.address }}
       </div>
-      <div>
-        <h3>{% trans 'Price' %}</h3>
+      <div class="object_field">
+        <div class="object_field_title">{% trans 'Price' %}</div>
 
         {% if object.is_paid %}
           {{ object.price }} / {{ object.get_period_display }}
@@ -31,14 +31,14 @@
           {% trans 'Free' %}
         {% endif %}
       </div>
-      <div>
-        <h3>{% trans 'Description' %}</h3>
+      <div class="object_field">
+        <div class="object_field_title">{% trans 'Description' %}</div>
         {% safe_html object.description %}
       </div>
     </div>
 
-    <div id="wall_location" class="span-14 last">
-      <h3>{% trans 'Location' %}</h3>
+    <div id="wall_location" class="object_field span-14 last">
+      <div class="object_field_title">{% trans 'Location' %}</div>
       {% map_view wall '10' '500px' '500px' %}
       <h5>
         <span>{% trans 'I am lost!' %}</span>&nbsp;
@@ -47,11 +47,11 @@
     </div>
   </div>
 
-  <div id="comments_container" class="span-24 last">
-    <div id="comments_list" class="span-24 last">
+  <div id="comments_container" class="comments_container span-24 last">
+    <div id="comments_list" class="comments_list span-24 last">
       {% include 'walls/_comment_list.html' %}
     </div>
-    <div id="comments_form" class="span-24 last">
+    <div id="comments_form" class="comments_form span-24 last">
       {% include 'walls/_comment_form.html' %}
     </div>
   </div>

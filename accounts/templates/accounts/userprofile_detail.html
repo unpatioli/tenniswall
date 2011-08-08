@@ -12,14 +12,14 @@
     {% endifcan %}
     
     <div id="profile_info" class="span-10">
-      <div>
-        <h3>{% trans 'Birthday' %}</h3>
+      <div class="object_field">
+        <div class="object_field_title">{% trans 'Birthday' %}</div>
         {{ object.birthday }}
       </div>
     </div>
     <div id="profile_other" class="span-14 last">
-      <div>
-        <h3>{% trans 'Sex' %}</h3>
+      <div class="object_field">
+        <div class="object_field_title">{% trans 'Sex' %}</div>
         {{ object.get_sex_display }}
       </div>
     </div>

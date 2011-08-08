@@ -89,7 +89,25 @@ input[type=submit] {
     font-size: large;
 }
 
+/* Object details */
+.object_field {
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+.object_field .object_field_title {
+    font-weight: bold;
+}
+
 /* Comments */
-ul.comments li {
+.comments_container {
+    padding-top: 10px;
+    border-top: 1px dashed gray;
+}
+.comments_container .comments_list ul.comments li {
     list-style-type: none;
+}
+
+.comments_container .comments_form {
+    margin-top: 15px;
+    padding-bottom: 20px;
 }
