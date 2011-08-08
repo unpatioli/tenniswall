@@ -1,0 +1,74 @@
+{% load i18n menu %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+  <title>{% block title %}Tenniswall{% endblock %}</title>
+
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/blueprint/screen.css" type="text/css" media="screen, projection">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/blueprint/print.css" type="text/css" media="print">
+  <!--[if lt IE 8]><link rel="stylesheet" href="{{ STATIC_URL }}css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/sticky-footer.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/application.css" type="text/css" media="screen">
+
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/menu.css" type="text/css" media="screen">
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+  {% include 'inc/_jquery_ui.html' %}
+
+  {% block head %}{% endblock %}
+</head>
+<body class="bp">
+  <div id="wrap">
+    <div id="main" class="container">
+      <div id="main_container" class="span-24 last">
+
+        <div id="header_container" class="span-24 last">
+          <div id="header" class="span-16">
+            <div id="logo" class="span-16 last logo">
+              <h1>
+                <a href="{% url root %}">TennisWall</a>
+              </h1>
+            </div>
+            {% block header %}{% endblock %}
+          </div>
+          <div id="auth_panel" class="span-8 last">
+            {% block auth_panel %}{% endblock %}
+          </div>
+          {% if messages %}
+            <div id="messages_container" class="prepend-1 span-22 append-1 last">
+              <div class="messages" class="span-24 last">
+                <ul class="messages_list">
+                  {% for message in messages %}
+                    <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message|safe }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        <div id="content_container" class="span-24 last">
+          <div id="content" class="span-24 last">
+            {% block content %}{% endblock %}
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div id="footer" class="container">
+    <div id="footer_content" class="span-24 last">
+      {% block footer %}
+        Tennis Wall
+      {% endblock %}
+    </div>
+  </div>
+</body>
+</html>
