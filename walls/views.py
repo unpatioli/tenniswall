@@ -148,8 +148,11 @@ class CommentedWallDetailView(CommentedDetailView):
     comment_target_field_name = 'wall'
 
     def get_queryset(self):
-        return Wall.objects.all() |\
-               Wall.all_walls.filter(reported_by=self.request.user)
+        qs = Wall.objects.all()
+        if self.request.user.is_authenticated():
+            qs |= Wall.all_walls.filter(reported_by=self.request.user)
+        return qs
+
 
     def get_success_url(self):
         return reverse('walls_detail', args=[self.object.pk, ])
