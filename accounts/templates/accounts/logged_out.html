@@ -3,6 +3,10 @@
 {% load i18n %}
 
 {% block content %}
-	<h3 class="notice center">{% trans "Successfully logged out" %}</h3>
-	<h1 class="success">{% trans "Good Bye!" %}</h1>
+	<div class="prepend-2 span-20 append-2 last">
+    <div class="success">
+      {% trans "Successfully logged out" %}
+    </div>
+  </div>
+  <h2>{% trans "Good Bye!" %}</h2>
 {% endblock %}
