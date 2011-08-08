@@ -4,7 +4,36 @@
 {% block content %}
   <form action="." method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value={% trans 'Register' %} />
+
+    <div class="form span-24 last">
+      <div class="non_field_errors span-24 last">
+        {{ form.non_field_errors }}
+      </div>
+      {% for field in form %}
+        {% if field.is_hidden %}
+          {{ field }}
+        {% else %}
+          <div class="field span-24 last {% if field.errors %}error{% endif %}">
+            {% if field.errors %}
+              <div class="input_errors_top align-left span-24 last">
+                {{ field.errors }}
+              </div>
+            {% endif %}
+            <div class="label align-right span-24 last">
+              {{ field.label_tag }}
+            </div>
+            <div class="field-info align-left span-24 last">
+              {{ field.help_text }}
+            </div>
+            <div class="input align-left span-24 last">
+              {{ field }}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+      <div class="field submit span-24 last">
+        <input type="submit" value={% trans 'Register' %} />
+      </div>
+    </div>
   </form>
 {% endblock %}
