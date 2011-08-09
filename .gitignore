@@ -22,5 +22,6 @@ tmp
 db/
 data/
 mongo/
+media/
 /static/
 .idea
