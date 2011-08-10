@@ -1,6 +1,6 @@
 from django import template
+from django.conf import settings
 from django.utils.safestring import SafeUnicode
-import settings
 
 register = template.Library()
 
