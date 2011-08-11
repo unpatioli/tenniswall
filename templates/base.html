@@ -1,5 +1,5 @@
 {% extends 'base_no_auth.html' %}
-{% load i18n menu %}
+{% load i18n facebook_tags menu %}
 
 {% block auth_panel %}
   {% if user.is_authenticated %}
@@ -43,6 +43,10 @@
             <input type="submit" id="auth_login_submit" value="{% trans 'Login' %}" />
             &nbsp;
             <a href="{% url accounts_register %}">{% trans 'Registration' %}</a>
+
+            &nbsp;
+            {% facebook_button %}
+            {% facebook_js %}
           </div>
         </div>
 
