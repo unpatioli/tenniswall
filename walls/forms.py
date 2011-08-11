@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.gis import forms as geoforms
 from django.utils.translation import ugettext as _
 from mapper.widgets import GoogleMapPickLocationWidget
-from walls.models import Wall, WallComment
+from walls.models import Wall, WallComment, WallImage
 
 class WallForm(geoforms.ModelForm):
     class Meta:
@@ -33,3 +33,9 @@ class WallCommentForm(forms.ModelForm):
                 'class': 'span-23'
             })
         }
+
+class WallImageForm(forms.ModelForm):
+    class Meta:
+        model = WallImage
+
+        fields = ('image', 'title', 'description')
