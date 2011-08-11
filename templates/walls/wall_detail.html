@@ -1,4 +1,5 @@
 {% extends 'walls/base.html' %}
+{% load url from future %}
 {% load i18n map_view safe_output models %}
 
 {% block content %}
@@ -7,12 +8,17 @@
       <ul class="menu horizontal">
         {% ifcan request.user 'edit' object %}
           <li>
-            <a href="{% url walls_edit object.pk %}">{% trans 'Edit' %}</a>
+            <a href="{% url 'walls_edit' object.pk %}">{% trans 'Edit' %}</a>
+          </li>
+          <li>
+            <a href="{% url 'walls_images_list_edit' object.pk %}">
+              {% trans 'Edit images' %}
+            </a>
           </li>
         {% endifcan %}
         {% ifcan request.user 'delete' object %}
           <li>
-            <a href="{% url walls_delete object.pk %}">{% trans 'Delete' %}</a>
+            <a href="{% url 'walls_delete' object.pk %}">{% trans 'Delete' %}</a>
           </li>
         {% endifcan %}
       </ul>
@@ -45,6 +51,9 @@
         <span id='locate_marker_control'>{% trans 'locate wall' %}</span>
       </h5>
     </div>
+
+    {% include 'walls/_wallimage_gallery.html' %}
+
   </div>
 
   <div id="comments_container" class="comments_container span-24 last">

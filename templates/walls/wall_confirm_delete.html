@@ -3,7 +3,18 @@
 {% load url from future %}
 
 {% block content %}
+  <div id="object_controls" class="object_controls span-24 last">
+    <ul class="menu horizontal">
+      <li>
+        <a href="{% url 'walls_detail' object.pk %}">
+          {% trans 'Back to wall' %}
+        </a>
+      </li>
+    </ul>
+  </div>
+
   <h1>{{ object }}</h1>
+  {% include 'walls/_wallimage_gallery.html' %}
   <h1>{% trans 'Would you like to delete it?' %}</h1>
   <form action="" method="post">
     {% csrf_token %}

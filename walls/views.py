@@ -3,9 +3,7 @@ from django.contrib import messages
 from django.contrib.gis.geos import Polygon
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
-from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.shortcuts import render_to_response
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.utils.translation import ugettext as _
 from django.views.generic.detail import   DetailView
@@ -231,19 +229,6 @@ def bbox(request):
                                 mimetype="application/json; charset=utf-8")
     raise Http404
 
-def wall_images(request, pk):
-    wall = Wall.objects.get(pk=pk)
-    ImageInlineFormset = inlineformset_factory(Wall, WallImage)
-    if request.method == 'POST':
-        formset = ImageInlineFormset(request.POST, request.FILES, instance=wall)
-        if formset.is_valid():
-            formset.save()
-    else:
-        formset = ImageInlineFormset(instance=wall)
-    return render_to_response('walls/wallimage_list.html',{
-        'formset': formset,
-    })
-
 class WallImagesMixin(object):
     model = WallImage
     form_class = WallImageForm
@@ -253,13 +238,26 @@ class WallImagesMixin(object):
         return WallImage.objects.filter(wall=wall_pk)
 
 class WallImagesListView(WallImagesMixin, ListView):
-    pass
+    def get_context_data(self, **kwargs):
+        context = super(WallImagesListView, self).get_context_data(**kwargs)
+        context.update({
+            'wall_pk': self.kwargs['wall_pk'],
+        })
+        return context
 
 class WallImagesDetailView(WallImagesMixin, DetailView):
     pass
 
 class WallImagesEditView(WallImagesMixin, UpdateView):
-    pass
+    def get_success_url(self):
+        return reverse('walls_images_list_edit', args=[self.object.wall_id,])
+
+    def get_context_data(self, **kwargs):
+        context = super(WallImagesEditView, self).get_context_data(**kwargs)
+        context.update({
+            'wall_pk': self.kwargs['wall_pk'],
+        })
+        return context
 
 class WallImagesDeleteView(WallImagesMixin, DeleteView):
     def get_success_url(self):
@@ -276,3 +274,13 @@ class WallImagesAddView(WallImagesMixin, CreateView):
     def form_invalid(self, form):
         messages.error(self.request, _('Wall image is not saved'))
         return super(WallImagesAddView, self).form_invalid(form)
+
+    def get_success_url(self):
+        return reverse('walls_images_list_edit', args=[self.object.wall_id,])
+
+    def get_context_data(self, **kwargs):
+        context = super(WallImagesAddView, self).get_context_data(**kwargs)
+        context.update({
+            'wall_pk': self.kwargs['wall_pk'],
+        })
+        return context

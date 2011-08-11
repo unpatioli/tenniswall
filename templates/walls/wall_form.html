@@ -1,5 +1,6 @@
 {% extends 'walls/base.html' %}
-{% load i18n form %}
+{% load url from future %}
+{% load i18n thumbnail form %}
 
 {% block head %}
   {{ block.super }}
@@ -8,6 +9,32 @@
 {% endblock %}
 
 {% block content %}
+  {% if form.instance.pk %}
+    <div id="object_controls" class="object_controls span-24 last">
+      <ul class="menu horizontal">
+        <li>
+          <a href="{% url 'walls_detail' form.instance.pk %}">
+            {% trans 'Back to wall' %}
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'walls_images_list_edit' object.pk %}">
+            {% trans 'Edit images' %}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    {% if form.instance.wallimage_set %}
+      <div class="span-24 last">
+        {% for wall_image in form.instance.wallimage_set.all %}
+          {% thumbnail wall_image.image "100x100" crop="center" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+          {% endthumbnail %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endif %}
   <form action="" method="post">
     {% csrf_token %}
     <div class="form span-24 last">

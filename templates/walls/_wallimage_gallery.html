@@ -1,0 +1,14 @@
+{% load url from future %}
+{% load thumbnail %}
+
+{% if object.wallimage_set %}
+  <div id="wall_images" class="span-24 last">
+    {% for wall_image in object.wallimage_set.all %}
+      {% thumbnail wall_image.image "100x100" crop="center" as im %}
+        <a href="{% url 'walls_images_detail' object.pk wall_image.pk %}">
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"/>
+        </a>
+      {% endthumbnail %}
+    {% endfor %}
+  </div>
+{% endif %}

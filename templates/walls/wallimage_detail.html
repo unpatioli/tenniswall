@@ -1,6 +1,40 @@
 {% extends 'walls/base.html' %}
+{% load url from future %}
+{% load i18n thumbnail models %}
 
 {% block content %}
-  {{ object }}
-  {% include 'walls/_wallimage_miniature.html' %}
+  <div id="object_controls" class="object_controls span-24 last">
+    <ul class="menu horizontal">
+      <li>
+        <a href="{% url 'walls_detail' object.wall_id %}">
+          {% trans 'Back to wall' %}
+        </a>
+      </li>
+      {% ifcan request.user 'edit' object.wall %}
+        <li>
+          <a href="{% url 'walls_images_edit' object.wall_id object.pk %}">
+            {% trans 'Edit' %}
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'walls_images_delete' object.wall_id object.pk %}">
+            {% trans 'Delete' %}
+          </a>
+        </li>
+      {% endifcan %}
+    </ul>
+  </div>
+
+  <h2>{{ object }}</h2>
+  
+  {% thumbnail object.image "300x300" crop="center" as im %}
+    <a href="{{ object.image.url }}">
+      <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"/>
+    </a>
+  {% endthumbnail %}
+
+  <div class="span-24 last">
+    {{ object.description }}
+  </div>
+
 {% endblock %}
