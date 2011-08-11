@@ -27,5 +27,19 @@ urlpatterns = patterns('',
 
 # Static files
 if settings.SERVE_STATIC:
+    # Static
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
     urlpatterns += staticfiles_urlpatterns()
+
+    # Media
+    media_url = settings.MEDIA_URL
+    if media_url[0] == '/':
+        media_url = media_url[1:]
+    if media_url[-1] != '/':
+        media_url += '/'
+    urlpatterns += patterns('django.views.static',
+        url(r'^%(media_url)s(?P<path>.*)$' % {'media_url': media_url},
+            'serve',
+            {'document_root': settings.MEDIA_ROOT + '/'}
+        )
+    )
