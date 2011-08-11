@@ -115,3 +115,6 @@ input[type=submit] {
     margin-top: 15px;
     padding-bottom: 20px;
 }
+
+/* Common */
+.center { text-align: center; }
