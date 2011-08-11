@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     # url(r'^tenniswall/', include('tenniswall.foo.urls')),
     url(r'^$', include('welcome.urls')),
     url(r'^accounts/', include('accounts.urls')),
+    url(r'^social/', include('socialregistration.urls')),
     url(r'^walls/', include('walls.urls')),
     url(r'^world/', include('world.urls')),
 
