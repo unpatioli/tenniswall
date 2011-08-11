@@ -1,0 +1,17 @@
+{% extends 'walls/base.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block content %}
+  {{ object }}
+  {% include 'walls/_wallimage_miniature.html' %}
+
+  <h1>{% trans 'Would you like to delete it?' %}</h1>
+  <form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" value="{% trans 'Yes' %}">
+    <a href="{% url 'walls_images_detail' object.wall_id object.pk %}">
+      {% trans 'No' %}
+    </a>
+  </form>
+{% endblock %}

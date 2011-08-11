@@ -1,0 +1,10 @@
+{% extends 'walls/base.html' %}
+
+{% block content %}
+  {% for object in object_list %}
+    <div>
+      <p>{{ object }}</p>
+      <p>{% include 'walls/_wallimage_miniature.html' %}</p>
+    </div>
+  {% endfor %}
+{% endblock %}

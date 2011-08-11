@@ -3,12 +3,14 @@ from django.contrib import messages
 from django.contrib.gis.geos import Polygon
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
+from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.views.generic import CreateView, TemplateView, UpdateView, DeleteView, ListView
+from django.shortcuts import render_to_response
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.utils.translation import ugettext as _
 from django.views.generic.detail import   DetailView
-from walls.forms import WallForm, WallCommentForm
-from walls.models import Wall, WallComment
+from walls.forms import WallForm, WallCommentForm, WallImageForm
+from walls.models import Wall, WallComment, WallImage
 
 class AddWallView(CreateView):
     model = Wall
@@ -228,3 +230,49 @@ def bbox(request):
             return HttpResponse(simplejson.dumps(markers),
                                 mimetype="application/json; charset=utf-8")
     raise Http404
+
+def wall_images(request, pk):
+    wall = Wall.objects.get(pk=pk)
+    ImageInlineFormset = inlineformset_factory(Wall, WallImage)
+    if request.method == 'POST':
+        formset = ImageInlineFormset(request.POST, request.FILES, instance=wall)
+        if formset.is_valid():
+            formset.save()
+    else:
+        formset = ImageInlineFormset(instance=wall)
+    return render_to_response('walls/wallimage_list.html',{
+        'formset': formset,
+    })
+
+class WallImagesMixin(object):
+    model = WallImage
+    form_class = WallImageForm
+    
+    def get_queryset(self):
+        wall_pk = self.kwargs['wall_pk']
+        return WallImage.objects.filter(wall=wall_pk)
+
+class WallImagesListView(WallImagesMixin, ListView):
+    pass
+
+class WallImagesDetailView(WallImagesMixin, DetailView):
+    pass
+
+class WallImagesEditView(WallImagesMixin, UpdateView):
+    pass
+
+class WallImagesDeleteView(WallImagesMixin, DeleteView):
+    def get_success_url(self):
+        return reverse('walls_images_list', args=[self.object.wall_id,])
+
+class WallImagesAddView(WallImagesMixin, CreateView):
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.wall_id = self.kwargs['wall_pk']
+        self.object.save()
+        messages.success(self.request, _('Wall image saved'))
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Wall image is not saved'))
+        return super(WallImagesAddView, self).form_invalid(form)
