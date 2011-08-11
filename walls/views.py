@@ -237,6 +237,12 @@ class WallImagesMixin(object):
         wall_pk = self.kwargs['wall_pk']
         return WallImage.objects.filter(wall=wall_pk)
 
+    def _assert_can_edit_wall(self, wall=None):
+        if not wall:
+            wall = Wall.objects.get(pk=self.kwargs['wall_pk'])
+        if not wall.can_edit(self.request.user):
+            raise Http404
+
 class WallImagesListView(WallImagesMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(WallImagesListView, self).get_context_data(**kwargs)
@@ -245,10 +251,22 @@ class WallImagesListView(WallImagesMixin, ListView):
         })
         return context
 
+class WallImagesListEditView(WallImagesListView):
+    template_name = 'walls/wallimage_list_edit.html'
+    
+    def get_queryset(self):
+        self._assert_can_edit_wall()
+        return super(WallImagesListEditView, self).get_queryset()
+
 class WallImagesDetailView(WallImagesMixin, DetailView):
     pass
 
 class WallImagesEditView(WallImagesMixin, UpdateView):
+    def get_object(self, queryset=None):
+        wall_image = super(WallImagesEditView, self).get_object(queryset)
+        self._assert_can_edit_wall(wall_image.wall)
+        return wall_image
+
     def get_success_url(self):
         return reverse('walls_images_list_edit', args=[self.object.wall_id,])
 
@@ -260,10 +278,21 @@ class WallImagesEditView(WallImagesMixin, UpdateView):
         return context
 
 class WallImagesDeleteView(WallImagesMixin, DeleteView):
+    def get_object(self, queryset=None):
+        wall_image = super(WallImagesDeleteView, self).get_object(queryset)
+        self._assert_can_edit_wall(wall_image.wall)
+        return wall_image
+    
     def get_success_url(self):
         return reverse('walls_images_list', args=[self.object.wall_id,])
 
 class WallImagesAddView(WallImagesMixin, CreateView):
+    def render_to_response(self, context, **response_kwargs):
+        self._assert_can_edit_wall()
+        return super(WallImagesAddView, self).render_to_response(
+            context,**response_kwargs
+        )
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.wall_id = self.kwargs['wall_pk']
