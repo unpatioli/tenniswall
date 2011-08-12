@@ -201,9 +201,9 @@ def bbox(request):
             wall_type = json_data.get('wall_type')
             if (wall_type and
                 not (isinstance(wall_type, (list, tuple))
-                    or getattr(wall_type,'__iter__',False))):
+                     or getattr(wall_type, '__iter__', False))):
                 wall_type = [wall_type]
-            
+
             qs = Wall.objects.none()
 
             if 'free' in wall_type:
@@ -212,7 +212,7 @@ def bbox(request):
                 qs |= Wall.paid.all()
 
             # Get walls in bbox
-            walls = qs.filter(location__contained = bbox_polygon)[:num]
+            walls = qs.filter(location__contained=bbox_polygon)[:num]
 
             # Assemble walls list
             markers = [{
@@ -229,68 +229,116 @@ def bbox(request):
                                 mimetype="application/json; charset=utf-8")
     raise Http404
 
+
 class WallImagesMixin(object):
+    """
+    Provides common methods for nested WallImage objects
+    """
     model = WallImage
     form_class = WallImageForm
-    
+
+    # regulates adding current user's walls to queryset if they are not approved
+    allow_self_walls = False
+    # current wall cache
+    wall = None
+
     def get_queryset(self):
-        wall_pk = self.kwargs['wall_pk']
-        return WallImage.objects.filter(wall=wall_pk)
+        """
+        Adds current wall to cache (self.wall) before return queryset
+        :return: Current wall's images queryset
+        """
+        self._get_wall()
+        return self.wall.wallimage_set.all()
+
+    def _get_wall(self, force=False):
+        """
+        Gets Wall object by wall_pk parameter
+        :param force: Not to check if self.wall already exists
+        :raise: Http404 if wall_pk corresponds to missing wall
+        """
+        if not self.wall or force:
+            wall_pk = self.kwargs['wall_pk']
+            qs = Wall.objects.all()
+            if self.allow_self_walls:
+                qs |= Wall.all_walls.filter(reported_by=self.request.user)
+            try:
+                self.wall = qs.get(pk=wall_pk)
+            except Wall.DoesNotExist:
+                raise Http404
 
     def _assert_can_edit_wall(self, wall=None):
+        """
+        Checks if current user can edit wall
+        :param wall: Wall to check against instead of cached wall
+        :raise: Http404 if user can't edit wall
+        """
         if not wall:
-            wall = Wall.objects.get(pk=self.kwargs['wall_pk'])
+            self._get_wall()
+            wall = self.wall
         if not wall.can_edit(self.request.user):
             raise Http404
+
 
 class WallImagesListView(WallImagesMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(WallImagesListView, self).get_context_data(**kwargs)
         context.update({
             'wall_pk': self.kwargs['wall_pk'],
-        })
+            })
         return context
+
 
 class WallImagesListEditView(WallImagesListView):
     template_name = 'walls/wallimage_list_edit.html'
-    
+    allow_self_walls = True
+
     def get_queryset(self):
         self._assert_can_edit_wall()
         return super(WallImagesListEditView, self).get_queryset()
 
+
 class WallImagesDetailView(WallImagesMixin, DetailView):
     pass
 
+
 class WallImagesEditView(WallImagesMixin, UpdateView):
+    allow_self_walls = True
+
     def get_object(self, queryset=None):
         wall_image = super(WallImagesEditView, self).get_object(queryset)
         self._assert_can_edit_wall(wall_image.wall)
         return wall_image
 
     def get_success_url(self):
-        return reverse('walls_images_list_edit', args=[self.object.wall_id,])
+        return reverse('walls_images_list_edit', args=[self.object.wall_id, ])
 
     def get_context_data(self, **kwargs):
         context = super(WallImagesEditView, self).get_context_data(**kwargs)
         context.update({
             'wall_pk': self.kwargs['wall_pk'],
-        })
+            })
         return context
 
+
 class WallImagesDeleteView(WallImagesMixin, DeleteView):
+    allow_self_walls = True
+
     def get_object(self, queryset=None):
         wall_image = super(WallImagesDeleteView, self).get_object(queryset)
         self._assert_can_edit_wall(wall_image.wall)
         return wall_image
-    
+
     def get_success_url(self):
-        return reverse('walls_images_list', args=[self.object.wall_id,])
+        return reverse('walls_images_list', args=[self.object.wall_id, ])
+
 
 class WallImagesAddView(WallImagesMixin, CreateView):
+    allow_self_walls = True
+
     def render_to_response(self, context, **response_kwargs):
         self._assert_can_edit_wall()
         return super(WallImagesAddView, self).render_to_response(
-            context,**response_kwargs
+            context, **response_kwargs
         )
 
     def form_valid(self, form):
@@ -305,11 +353,11 @@ class WallImagesAddView(WallImagesMixin, CreateView):
         return super(WallImagesAddView, self).form_invalid(form)
 
     def get_success_url(self):
-        return reverse('walls_images_list_edit', args=[self.object.wall_id,])
+        return reverse('walls_images_list_edit', args=[self.object.wall_id, ])
 
     def get_context_data(self, **kwargs):
         context = super(WallImagesAddView, self).get_context_data(**kwargs)
         context.update({
             'wall_pk': self.kwargs['wall_pk'],
-        })
+            })
         return context
