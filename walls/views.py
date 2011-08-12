@@ -298,7 +298,7 @@ class WallImagesListEditView(WallImagesListView):
 
 
 class WallImagesDetailView(WallImagesMixin, DetailView):
-    pass
+    allow_self_walls = True
 
 
 class WallImagesEditView(WallImagesMixin, UpdateView):
