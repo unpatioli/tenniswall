@@ -48,7 +48,10 @@ from socialregistration import signals as social_signals
 from socialregistration import models as social_models
 
 def connect_facebook(user, profile, client, **kwargs):
-    print "Connect Facebook"
+    p = client.graph.get_object("me")
+    if 'email' in p:
+        user.email = p['email']
+        user.save()
 
 def login_facebook(user, profile, client, **kwargs):
     print "Login Facebook"
