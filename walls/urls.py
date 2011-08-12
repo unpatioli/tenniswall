@@ -26,7 +26,7 @@ urlpatterns = patterns('',
         name='walls_images_list'
     ),
     url(r'^(?P<wall_pk>\d+)/images/edit/$',
-        WallImagesListEditView.as_view(),
+        login_required(WallImagesListEditView.as_view()),
         name='walls_images_list_edit'
     ),
     url(r'^(?P<wall_pk>\d+)/images/(?P<pk>\d+)/$',
@@ -34,15 +34,15 @@ urlpatterns = patterns('',
         name='walls_images_detail'
     ),
     url(r'^(?P<wall_pk>\d+)/images/(?P<pk>\d+)/edit/$',
-        WallImagesEditView.as_view(),
+        login_required(WallImagesEditView.as_view()),
         name='walls_images_edit'
     ),
     url(r'^(?P<wall_pk>\d+)/images/(?P<pk>\d+)/delete/$',
-        WallImagesDeleteView.as_view(),
+        login_required(WallImagesDeleteView.as_view()),
         name='walls_images_delete'
     ),
     url(r'^(?P<wall_pk>\d+)/images/add/$',
-        WallImagesAddView.as_view(),
+        login_required(WallImagesAddView.as_view()),
         name='walls_images_add'
     ),
 
