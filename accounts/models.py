@@ -53,14 +53,7 @@ def connect_facebook(user, profile, client, **kwargs):
         user.email = p['email']
         user.save()
 
-def login_facebook(user, profile, client, **kwargs):
-    print "Login Facebook"
-
 social_signals.connect.connect(
     connect_facebook,
-    sender=social_models.FacebookProfile
-)
-social_signals.login.connect(
-    login_facebook,
     sender=social_models.FacebookProfile
 )
