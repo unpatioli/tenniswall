@@ -3,6 +3,7 @@ from django.conf.urls.defaults import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from social.forms import Profile
 
 admin.autodiscover()
 
@@ -15,9 +16,15 @@ urlpatterns = patterns('',
     # url(r'^tenniswall/', include('tenniswall.foo.urls')),
     url(r'^$', include('welcome.urls')),
     url(r'^accounts/', include('accounts.urls')),
-    url(r'^social/', include('socialregistration.urls')),
     url(r'^walls/', include('walls.urls')),
     url(r'^world/', include('world.urls')),
+
+    url(r'^social/setup/$',
+        'socialregistration.views.setup',
+        { 'form_class': Profile },
+        name='socialregistration_setup'
+    ),
+    url(r'^social/', include('socialregistration.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
