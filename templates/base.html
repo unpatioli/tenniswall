@@ -43,16 +43,18 @@
             <input type="submit" id="auth_login_submit" value="{% trans 'Login' %}" />
             &nbsp;
             <a href="{% url accounts_register %}">{% trans 'Registration' %}</a>
-
-            &nbsp;
-            {% facebook_button %}
-            {% facebook_js %}
           </div>
         </div>
 
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ request.path }}" />
       </form>
+      <div id="auth_form_alternative_controls" class="span-8 last">
+        <div id="auth_form_facebook_controls">
+          {% facebook_button %}
+          {% facebook_js %}
+        </div>
+      </div>
     </div>
   {% endif %}
 {% endblock %}

@@ -49,11 +49,16 @@
 input[type=submit] {
     padding: 3px;
 }
-#auth_form_left, #auth_form_controls {
+#auth_form_left,
+#auth_form_controls,
+#auth_form_facebook_controls {
     margin-left: 15px;
 }
 #auth_form_right {
     margin-left: 5px;
+}
+#auth_form_alternative_controls {
+    margin-top: 10px;
 }
 
 #account_info_panel #username {
