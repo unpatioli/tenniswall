@@ -121,5 +121,20 @@ input[type=submit] {
     padding-bottom: 20px;
 }
 
+/* Wall list */
+li.wall_item {
+    list-style: none;
+    margin-top: 25px;
+    /*border-bottom: dashed 1px gray;*/
+}
+li.wall_item a {
+    font-weight: bold;
+    font-size: large;
+    text-decoration: none;
+}
+li.wall_item a:hover {
+    text-decoration: underline;
+}
+
 /* Common */
 .center { text-align: center; }
