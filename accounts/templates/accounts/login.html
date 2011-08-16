@@ -9,7 +9,7 @@
     </p>
   {% endif %}
 
-  <form action="{% url 'django.contrib.auth.views.login' %}" method="post">
+  <form action="{% url 'accounts_login' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ next }}" />
 
