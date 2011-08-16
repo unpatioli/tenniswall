@@ -1,0 +1,38 @@
+{% extends 'walls/base.html' %}
+{% load url from future %}
+{% load i18n thumbnail %}
+
+{% block content %}
+  <div id="object_controls" class="object_controls span-24 last">
+    <ul class="menu horizontal">
+      <li>
+        <a href="{% url 'accounts_my_profile' %}">
+          {% trans 'Back to profile' %}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div id="wall_list" class="span-24 last">
+    {% if object_list %}
+      <ul>
+        {% for object in object_list %}
+          <li class="wall_item">
+            <a href="{% url 'walls_detail' object.pk %}">
+              {{ object }}
+            </a>
+            {% if object.wallimage_set %}
+              <div>
+                {% for wall_image in object.wallimage_set.all %}
+                  {% thumbnail wall_image.image "50x50" crop="center" as im %}
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"/>
+                  {% endthumbnail %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+{% endblock %}
