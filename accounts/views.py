@@ -113,7 +113,7 @@ class MyProfileCreateView(CreateView):
     def post(self, request, *args, **kwargs):
         if self._check_profile_exists(request.user):
             return redirect('accounts_my_profile')
-        return super(MyProfileCreateView, self).get(request, *args, **kwargs)
+        return super(MyProfileCreateView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
