@@ -5,9 +5,18 @@
   <div id="profile_detail" class="span-24 last">
     {% ifcan request.user 'edit' object %}
       <div id="object_controls" class="object_controls span-24 last">
-        <div>
-          <a href="{% url accounts_my_profile_edit %}">{% trans 'Edit' %}</a>
-        </div>
+        <ul class="menu horizontal">
+          <li>
+            <a href="{% url accounts_my_profile_edit %}">
+              {% trans 'Edit' %}
+            </a>
+          </li>
+          <li>
+            <a href="{% url walls_my_list %}">
+              {% trans 'My walls' %}
+            </a>
+          </li>
+        </ul>
       </div>
     {% endifcan %}
     
