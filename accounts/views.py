@@ -9,6 +9,9 @@ from django.views.generic import DetailView, CreateView, UpdateView, TemplateVie
 from accounts.forms import  UserprofileForm, NewUserForm
 from accounts.models import UserProfile
 
+#########
+# Views #
+#########
 def login(request, *args, **kwargs):
     from django.contrib.auth.views import login as auth_login
     if request.user.is_authenticated():
@@ -20,6 +23,22 @@ class RegistrationView(CreateView):
     form_class = NewUserForm
     template_name = 'accounts/user_form.html'
     success_url = lazy(reverse, str)('accounts_register_thankyou')
+
+    def get(self, request, *args, **kwargs):
+        return conditional_method(
+            request.user.is_authenticated(),
+            lambda : redirect('accounts_my_profile'),
+            lambda : super(RegistrationView, self).get(request,
+                                                       *args, **kwargs)
+        )
+
+    def post(self, request, *args, **kwargs):
+        return conditional_method(
+            request.user.is_authenticated(),
+            lambda : redirect('accounts_my_profile'),
+            lambda : super(RegistrationView, self).post(request,
+                                                        *args, **kwargs)
+        )
 
     def form_valid(self, form):
         username = form.cleaned_data['username']
@@ -133,3 +152,13 @@ class MyProfileEditView(UpdateView):
         if not self.object:
             return redirect('accounts_my_profile_new')
         return super(MyProfileEditView, self).render_to_response(context, **response_kwargs)
+
+#########
+# Utils #
+#########
+def conditional_method(predicate, l1, l2):
+    if hasattr(predicate, '__call__'):
+        predicate = predicate()
+    if predicate:
+        return l1()
+    return l2()
