@@ -1,9 +1,15 @@
 from django.conf.urls.defaults import patterns, url
 from django.contrib.auth.decorators import login_required
 from walls.views import AddWallView, EditWallView,\
-    CommentedWallDetailView, DeleteWallView, WallImagesListView, WallImagesDetailView, WallImagesEditView, WallImagesDeleteView, WallImagesAddView, WallImagesListEditView
+    CommentedWallDetailView, DeleteWallView, WallImagesListView,\
+    WallImagesDetailView, WallImagesEditView, WallImagesDeleteView,\
+    WallImagesAddView, WallImagesListEditView, MyWallsListView
 
 urlpatterns = patterns('',
+    url(r'^my/$',
+        login_required(MyWallsListView.as_view()),
+        name='walls_my_list'
+    ),
     url(r'^(?P<pk>\d+)/$',
         CommentedWallDetailView.as_view(),
         name='walls_detail'

@@ -71,6 +71,13 @@ class DeleteWallView(DeleteView):
         return res
 
 
+class MyWallsListView(ListView):
+    template_name = 'walls/my_wall_list.html'
+    
+    def get_queryset(self):
+        return Wall.all_walls.filter(reported_by=self.request.user)
+
+
 class CommentedDetailView(DetailView):
     comment_form_class = None
     comment_model = None
