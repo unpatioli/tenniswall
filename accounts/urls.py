@@ -4,7 +4,7 @@ from accounts.views import MyProfileView, MyProfileCreateView, ProfileView, MyPr
 
 urlpatterns = patterns('',
     url(r'login/$',
-        'django.contrib.auth.views.login',
+        'accounts.views.login',
         { 'template_name': 'accounts/login.html', },
         name='accounts_login'
     ),

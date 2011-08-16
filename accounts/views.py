@@ -9,6 +9,12 @@ from django.views.generic import DetailView, CreateView, UpdateView, TemplateVie
 from accounts.forms import  UserprofileForm, NewUserForm
 from accounts.models import UserProfile
 
+def login(request, *args, **kwargs):
+    from django.contrib.auth.views import login as auth_login
+    if request.user.is_authenticated():
+        return redirect('accounts_my_profile')
+    return auth_login(request, *args, **kwargs)
+
 class RegistrationView(CreateView):
     model = User
     form_class = NewUserForm
