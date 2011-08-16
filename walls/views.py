@@ -18,7 +18,10 @@ class AddWallView(CreateView):
         self.object = form.save(commit=False)
         self.object.reported_by = self.request.user
         self.object.save()
-        messages.success(self.request, _('Wall saved'))
+        messages.success(
+            self.request,
+            _('Your wall is saved. It will be placed on map after moderation.')
+        )
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form):
