@@ -5,6 +5,7 @@ psycopg2==2.4.3
 python-memcached==1.47
 
 South==0.7.3
+django-registration==0.7
 django-socialregistration==0.4.6
 -e git://github.com/facebook/python-sdk.git#egg=FacebookSDK
 sorl-thumbnail==11.09
