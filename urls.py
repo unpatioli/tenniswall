@@ -3,6 +3,8 @@ from django.conf.urls.defaults import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from registration.forms import RegistrationFormUniqueEmail
+from registration.views import register
 from social.forms import Profile
 
 admin.autodiscover()
@@ -15,7 +17,14 @@ urlpatterns = patterns('',
     # url(r'^$', 'tenniswall.views.home', name='home'),
     # url(r'^tenniswall/', include('tenniswall.foo.urls')),
     url(r'^$', include('welcome.urls')),
-    url(r'^accounts/', include('accounts.urls')),
+
+    url(r'^accounts/register/$',
+        register,
+        {'form_class': RegistrationFormUniqueEmail,},
+        'registration_register',
+    ),
+    url(r'^accounts/', include('registration.urls')),
+
     url(r'^walls/', include('walls.urls')),
     url(r'^world/', include('world.urls')),
 
