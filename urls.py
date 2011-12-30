@@ -25,6 +25,8 @@ urlpatterns = patterns('',
     ),
     url(r'^accounts/', include('registration.urls')),
 
+    url(r'^profiles/', include('profiles.urls')),
+
     url(r'^walls/', include('walls.urls')),
     url(r'^world/', include('world.urls')),
 
