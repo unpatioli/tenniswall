@@ -1,0 +1,12 @@
+{% extends "base_no_auth.html" %}
+
+{% load i18n %}
+
+{% block content %}
+	<div class="prepend-2 span-20 append-2 last">
+    <div class="success">
+      {% trans "Successfully logged out" %}
+    </div>
+  </div>
+  <h2>{% trans "Good Bye!" %}</h2>
+{% endblock %}
