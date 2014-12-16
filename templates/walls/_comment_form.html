@@ -38,6 +38,6 @@
     <input type="submit" value="{% trans 'Post' %}" />
   </form>
 {% else %}
-  <a href="{% url 'accounts_login' %}?next={{ request.get_full_path }}">{% trans 'Log in' %}</a>
+  <a href="{% url 'auth_login' %}?next={{ request.get_full_path }}">{% trans 'Log in' %}</a>
   {% trans 'to add a comment' %}
 {% endif %}

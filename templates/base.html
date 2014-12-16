@@ -1,5 +1,6 @@
 {% extends 'base_no_auth.html' %}
-{% load i18n facebook_tags menu %}
+{% load i18n menu %}
+{% load url from future %}
 
 {% block auth_panel %}
   {% if user.is_authenticated %}
@@ -18,12 +19,12 @@
         </div>
       </div>
       <div class="span-2 right last">
-        <a href="{% url accounts_logout %}">{% trans 'Logout' %}</a>
+        <a href="{% url 'auth_logout' %}">{% trans 'Logout' %}</a>
       </div>
     </div>
   {% else %}
     <div id="auth_form" class="span-8 last">
-      <form action="{% url accounts_login %}" method="post">
+      <form action="{% url 'auth_login' %}" method="post">
         <div class="span-4">
           <div id="auth_form_left">
             <label for="auth_login">{% trans 'Login' %}</label>
@@ -42,7 +43,7 @@
           <div id="auth_form_controls">
             <input type="submit" id="auth_login_submit" value="{% trans 'Login' %}" />
             &nbsp;
-            <a href="{% url accounts_register %}">{% trans 'Registration' %}</a>
+            <a href="{% url 'registration_register' %}">{% trans 'Registration' %}</a>
           </div>
         </div>
 
@@ -51,8 +52,13 @@
       </form>
       <div id="auth_form_alternative_controls" class="span-8 last">
         <div id="auth_form_facebook_controls">
-          {% facebook_button %}
-          {% facebook_js %}
+
+          {% include 'django_facebook/_facebook_js.html' %}
+
+          <form action="{% url 'facebook_connect' %}?facebook_login=1" method="post">
+            <a id="facebook_login" href="javascript:void(0);" onclick="F.connect(this.parentNode);"></a>
+            <input type="hidden" name="next" value="{{ request.path }}">
+          </form>
         </div>
       </div>
     </div>

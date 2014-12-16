@@ -43,17 +43,3 @@ def user_created_handler(sender, instance, created, **kwargs):
 post_save.connect(user_created_handler,
                   sender=User,
                   dispatch_uid="users-profilecreation-signal")
-
-from socialregistration import signals as social_signals
-from socialregistration import models as social_models
-
-def connect_facebook(user, profile, client, **kwargs):
-    p = client.graph.get_object("me")
-    if 'email' in p:
-        user.email = p['email']
-        user.save()
-
-social_signals.connect.connect(
-    connect_facebook,
-    sender=social_models.FacebookProfile
-)
